@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Experiment: Typing Speed</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet"> 
+
+    <style>
+        html {
+            padding: 8em;
+            background-color: #222;
+        }
+
+        body {
+            color: #eee;
+            background-color: #444;
+
+            display: flex;
+            flex-direction: column;
+
+            margin: auto;
+            padding: 1em;
+            max-width: 80em;
+        }
+
+        * {
+            font-family: 'Roboto Condensed';
+            font-size: 1.1rem;
+        }
+
+        body > *:not(#submit) {
+            margin-bottom: 1em;
+        }
+
+        input[type="button"] {
+            border: none;
+            outline: none;
+            padding: 0.8em;
+            background-color: #fff1;
+            color: #eee;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #fff2;
+            color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            resize: none;
+
+            border: 3px solid #555;
+            outline: none;
+            padding: 0.8em;
+            background-color: #444;
+            color: #eee;
+        }
+    </style>
+</head>
+<body>
+    
+    <audio id="sample" src="#" controls preload>Inhalt</audio>
+    <textarea cols="20" rows="12" autofocus></textarea>
+    <input id="submit" type="button" value="Bestätigen">
+
+    <a id="download">Download Recorded Data</a>
+
+    <script>
+        const get = select => document.querySelector(select)
+
+        const audio = get("#sample")
+        const text = get("textarea")
+        const submit = get("#submit")
+        const download = get("#download")
+
+        text.oninput = () => {
+
+        }
+
+        submit.onclick = () => {
+            onFinish()
+        }
+
+        function getRandomizedSentences() {
+            const ordered = [
+                "fox", "2"
+            ]
+
+            const sentences = []
+
+            while (ordered.length)
+                sentences.push(ordered[Math.floor(Math.random() * ordered.length)])
+
+            return sentences
+        }
+
+        function onFinish() {
+            const name = "person1"
+            const json = {
+                hello: "world"
+            }
+
+            const blob = new Blob([JSON.stringify(json)], { type: 'text/json' })
+            download.href = window.URL.createObjectURL(blob)
+            download.download = "data-" + name + ".json"
+        }
+        
+    </script>
+</body>
+</html>
