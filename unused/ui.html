@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Experiment: Typing Speed</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet"> 
+
+    <style>
+        html {
+            padding: 8em;
+            background-color: #222;
+        }
+
+        main {
+            color: #eee;
+            background-color: #444;
+
+            display: flex;
+            flex-direction: column;
+
+            margin: auto;
+            padding: 1em;
+            max-width: 80em;
+        }
+
+        * {
+            font-family: 'Roboto Condensed';
+            font-size: 1.1rem;
+        }
+
+        main > *:not(:last-child) {
+            margin-bottom: 1em;
+        }
+
+        input[type="button"] {
+            border: none;
+            outline: none;
+            padding: 0.8em;
+            background-color: #fff1;
+            color: #eee;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #fff2;
+            color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            resize: none;
+
+            border: 3px solid #555;
+            outline: none;
+            padding: 0.8em;
+            background-color: #444;
+            color: #eee;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #download-page {
+            
+        }
+
+    </style>
+</head>
+<body>
+    
+    <main>
+        <p id="target-phrase"></p>
+        <textarea cols="20" rows="12" autofocus></textarea>
+        <input id="submit" type="button" value="Bestätigen">
+
+        <div id="download-page" class="hidden">
+            <a id="download">Download Recorded Data</a>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+
+    <script>
+        const get = select => document.querySelector(select)
+
+        const audio = get("#sample")
+        const text = get("textarea")
+        const submit = get("#submit")
+        const download = get("#download")
+        const downloadPage = get("#download-page")
+
+        const phrases = getRandomizedPhraseVariations()
+        let events = null
+
+        function start(){
+            downloadPage.classList.add("hidden")
+
+            text.value = ""
+            text.focus()
+
+            events.push({
+                type: "start", time: Date.now(),
+                details: { phrase: phrases[0] }
+            })
+        }
+
+        function download() {
+            downloadPage.classList.remove("hidden")
+
+            const blob = new Blob([JSON.stringify(events)], { type: 'text/json' })
+            download.href = window.URL.createObjectURL(blob)
+            download.download = "experiment-aufzeichnung.json"
+        }
+
+        text.oninput = event => {
+            events.push({
+                type: "text", time: Date.now(),
+                details: {
+                    inputData: event.data,
+                    inputType: event.inputType,
+                    result: text.value
+                }
+            })
+        }
+
+        submit.onclick = () => {
+            events.push({
+                type: "confirm", time: Date.now(),
+                details: { result: text.value }
+            })
+            onFinish()
+        }
+
+        start()
+        
+        
+    </script>
+</body>
+</html>
