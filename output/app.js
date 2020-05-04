@@ -4522,7 +4522,7 @@ var elm$core$Set$toList = function (_n0) {
 	var dict = _n0;
 	return elm$core$Dict$keys(dict);
 };
-var author$project$Main$initial = {Q: 0, J: _List_Nil, l: author$project$Main$Ready, x: 0, y: _List_Nil};
+var author$project$Main$initial = {Q: 0, J: _List_Nil, j: author$project$Main$Ready, x: 0, y: _List_Nil};
 var author$project$Main$RandomPhrase = F3(
 	function (target, suggestions, percentage) {
 		return {aG: percentage, aJ: suggestions, F: target};
@@ -5481,9 +5481,6 @@ var author$project$Main$randomize = function () {
 		A2(elm$random$Random$andThen, elm_community$random_extra$Random$List$shuffle, phrases),
 		elm_community$random_extra$Random$List$shuffle(author$project$Main$timepoints));
 }();
-var author$project$Main$Download = function (a) {
-	return {$: 3, a: a};
-};
 var author$project$Main$Presenting = {$: 1};
 var author$project$Main$Typing = function (a) {
 	return {$: 2, a: a};
@@ -5767,6 +5764,17 @@ var author$project$Main$update = F2(
 			{
 				J: A2(elm$core$List$cons, event, model.J)
 			});
+		var phrasesCompleted = !((model.x + 1) % author$project$Main$blockSize);
+		var nextPhrase = _Utils_update(
+			recordEvent,
+			{
+				j: author$project$Main$Presenting,
+				x: recordEvent.x + 1,
+				y: A2(
+					elm$core$Maybe$withDefault,
+					_List_Nil,
+					elm$core$List$tail(recordEvent.y))
+			});
 		var result = function () {
 			switch (event.$) {
 				case 0:
@@ -5775,48 +5783,41 @@ var author$project$Main$update = F2(
 						recordEvent,
 						{y: phrases});
 				case 1:
-					var _n1 = model.l;
+					var _n1 = model.j;
 					switch (_n1.$) {
 						case 0:
 							return _Utils_update(
 								recordEvent,
-								{l: author$project$Main$Presenting, x: model.x + 1});
+								{j: author$project$Main$Presenting});
 						case 1:
 							return _Utils_update(
 								recordEvent,
 								{
-									l: author$project$Main$Typing('')
+									j: author$project$Main$Typing('')
 								});
 						case 2:
-							return _Utils_update(
-								recordEvent,
-								{
-									l: author$project$Main$Download('*gemessene daten*'),
-									y: A2(
-										elm$core$Maybe$withDefault,
-										_List_Nil,
-										elm$core$List$tail(model.y))
-								});
+							return phrasesCompleted ? _Utils_update(
+								nextPhrase,
+								{j: author$project$Main$Ready}) : nextPhrase;
 						default:
 							return model;
 					}
 				default:
 					var time = event.a;
 					var newValue = event.b;
-					var _n2 = model.l;
+					var _n2 = model.j;
 					if (_n2.$ === 2) {
 						var oldValue = _n2.a;
 						return _Utils_update(
 							recordEvent,
 							{
-								l: author$project$Main$Typing(newValue)
+								j: author$project$Main$Typing(newValue)
 							});
 					} else {
 						return model;
 					}
 			}
 		}();
-		var phrasesCompleted = !(model.x % author$project$Main$blockSize);
 		var blocksCompleted = ((model.x / author$project$Main$blockSize) | 0) === 3;
 		return _Utils_Tuple2(result, elm$core$Platform$Cmd$none);
 	});
@@ -5892,7 +5893,7 @@ var elm$html$Html$Attributes$stringProperty = F2(
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var author$project$Main$view = function (model) {
 	var contents = function () {
-		var _n0 = _Utils_Tuple2(model.l, model.y);
+		var _n0 = _Utils_Tuple2(model.j, model.y);
 		_n0$4:
 		while (true) {
 			switch (_n0.a.$) {

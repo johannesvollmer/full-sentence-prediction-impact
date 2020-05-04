@@ -83,15 +83,22 @@ update : Message -> Model -> (Model, Cmd Message)
 update event model = 
   let
     recordEvent = { model | events = event :: model.events }
-    phrasesCompleted = remainderBy blockSize model.phraseIndex  == 0
+    phrasesCompleted = remainderBy blockSize (model.phraseIndex + 1) == 0
     blocksCompleted = model.phraseIndex // blockSize == 3
+
+    nextPhrase = 
+      { recordEvent
+      | phrases = List.tail recordEvent.phrases |> Maybe.withDefault []
+      , phraseIndex = recordEvent.phraseIndex + 1
+      , mode = Presenting 
+      }
 
     result = case event of
       Randomize phrases -> { recordEvent | phrases = phrases }
       Next _ -> case model.mode of
-        Ready -> { recordEvent | phraseIndex = model.phraseIndex + 1, mode = Presenting }
+        Ready -> { recordEvent | mode = Presenting }
         Presenting -> { recordEvent | mode = Typing "" }
-        Typing _ -> { recordEvent | mode = Download "*gemessene daten*", phrases = List.tail model.phrases |> Maybe.withDefault [] }
+        Typing _ -> if phrasesCompleted then { nextPhrase | mode = Ready } else nextPhrase
         Download _ -> model
 
       Type time newValue -> case model.mode of
