@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.L.A === region.Q.A)
+	if (region.N.C === region.T.C)
 	{
-		return 'on line ' + region.L.A;
+		return 'on line ' + region.N.C;
 	}
-	return 'on lines ' + region.L.A + ' through ' + region.Q.A;
+	return 'on lines ' + region.N.C + ' through ' + region.T.C;
 }
 
 
@@ -1162,6 +1162,43 @@ function _String_fromList(chars)
 	return _List_toArray(chars).join('');
 }
 
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 
 
 
@@ -1857,9 +1894,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.ay,
-		impl.aH,
-		impl.aE,
+		impl.aB,
+		impl.aL,
+		impl.aI,
 		function() { return function() {} }
 	);
 });
@@ -2359,89 +2396,6 @@ function _Platform_mergeExportsDebug(moduleName, obj, exports)
 
 
 
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
-
-
-
-function _Time_now(millisToPosix)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
-}
-
-var _Time_setInterval = F2(function(interval, task)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(
-			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
-}
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
-
-
-
 
 // HELPERS
 
@@ -2787,9 +2741,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		o: func(record.o),
-		M: record.M,
-		K: record.K
+		p: func(record.p),
+		O: record.O,
+		M: record.M
 	}
 });
 
@@ -3057,11 +3011,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.o;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.M;
+		var message = !tag ? value : tag < 3 ? value.a : value.p;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.O;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.K) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.M) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4011,11 +3965,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.ay,
-		impl.aH,
-		impl.aE,
+		impl.aB,
+		impl.aL,
+		impl.aI,
 		function(sendToApp, initialModel) {
-			var view = impl.aK;
+			var view = impl.aN;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -4047,12 +4001,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.ay,
-		impl.aH,
-		impl.aE,
+		impl.aB,
+		impl.aL,
+		impl.aI,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.B && impl.B(sendToApp)
-			var view = impl.aK;
+			var divertHrefToApp = impl.D && impl.D(sendToApp)
+			var view = impl.aN;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4060,12 +4014,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aq);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aG) && (_VirtualDom_doc.title = title = doc.aG);
+				(title !== doc.aK) && (_VirtualDom_doc.title = title = doc.aK);
 			});
 		}
 	);
@@ -4121,12 +4075,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aA;
-	var onUrlRequest = impl.aB;
+	var onUrlChange = impl.aD;
+	var onUrlRequest = impl.aE;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		B: function(sendToApp)
+		D: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4142,9 +4096,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ad === next.ad
-							&& curr.U === next.U
-							&& curr.aa.a === next.aa.a
+							&& curr.af === next.af
+							&& curr.X === next.X
+							&& curr.ac.a === next.ac.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -4152,13 +4106,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		ay: function(flags)
+		aB: function(flags)
 		{
-			return A3(impl.ay, flags, _Browser_getUrl(), key);
+			return A3(impl.aB, flags, _Browser_getUrl(), key);
 		},
-		aK: impl.aK,
-		aH: impl.aH,
-		aE: impl.aE
+		aN: impl.aN,
+		aL: impl.aL,
+		aI: impl.aI
 	});
 }
 
@@ -4224,17 +4178,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aw: 'hidden', ar: 'visibilitychange' }
+		? { az: 'hidden', au: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aw: 'mozHidden', ar: 'mozvisibilitychange' }
+		? { az: 'mozHidden', au: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aw: 'msHidden', ar: 'msvisibilitychange' }
+		? { az: 'msHidden', au: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aw: 'webkitHidden', ar: 'webkitvisibilitychange' }
-		: { aw: 'hidden', ar: 'visibilitychange' };
+		? { az: 'webkitHidden', au: 'webkitvisibilitychange' }
+		: { az: 'hidden', au: 'visibilitychange' };
 }
 
 
@@ -4315,12 +4269,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		ah: _Browser_getScene(),
-		ak: {
-			am: _Browser_window.pageXOffset,
-			an: _Browser_window.pageYOffset,
-			al: _Browser_doc.documentElement.clientWidth,
-			T: _Browser_doc.documentElement.clientHeight
+		aj: _Browser_getScene(),
+		an: {
+			ap: _Browser_window.pageXOffset,
+			aq: _Browser_window.pageYOffset,
+			ao: _Browser_doc.documentElement.clientWidth,
+			W: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4330,8 +4284,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		al: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		T: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ao: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		W: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4354,15 +4308,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			ah: {
-				al: node.scrollWidth,
-				T: node.scrollHeight
+			aj: {
+				ao: node.scrollWidth,
+				W: node.scrollHeight
 			},
-			ak: {
-				am: node.scrollLeft,
-				an: node.scrollTop,
-				al: node.clientWidth,
-				T: node.clientHeight
+			an: {
+				ap: node.scrollLeft,
+				aq: node.scrollTop,
+				ao: node.clientWidth,
+				W: node.clientHeight
 			}
 		};
 	});
@@ -4392,18 +4346,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			ah: _Browser_getScene(),
-			ak: {
-				am: x,
-				an: y,
-				al: _Browser_doc.documentElement.clientWidth,
-				T: _Browser_doc.documentElement.clientHeight
+			aj: _Browser_getScene(),
+			an: {
+				ap: x,
+				aq: y,
+				ao: _Browser_doc.documentElement.clientWidth,
+				W: _Browser_doc.documentElement.clientHeight
 			},
-			at: {
-				am: x + rect.left,
-				an: y + rect.top,
-				al: rect.width,
-				T: rect.height
+			aw: {
+				ap: x + rect.left,
+				aq: y + rect.top,
+				ao: rect.width,
+				W: rect.height
 			}
 		};
 	});
@@ -4438,11 +4392,56 @@ function _Browser_load(url)
 		}
 	}));
 }
-var author$project$Main$Initial = {$: 0};
-var author$project$Phrase$Phrase = F2(
-	function (target, variants) {
-		return {aF: target, aJ: variants};
+
+
+
+function _Time_now(millisToPosix)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(millisToPosix(Date.now())));
 	});
+}
+
+var _Time_setInterval = F2(function(interval, task)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
+		return function() { clearInterval(id); };
+	});
+});
+
+function _Time_here()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(
+			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
+		));
+	});
+}
+
+
+function _Time_getZoneName()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		try
+		{
+			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
+		}
+		catch (e)
+		{
+			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
+		}
+		callback(_Scheduler_succeed(name));
+	});
+}
+var author$project$Main$Randomize = function (a) {
+	return {$: 0, a: a};
+};
+var author$project$Main$Ready = {$: 0};
 var elm$core$Basics$EQ = 1;
 var elm$core$Basics$LT = 0;
 var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
@@ -4466,6 +4465,7 @@ var elm$core$Array$foldr = F3(
 			A3(elm$core$Elm$JsArray$foldr, func, baseCase, tail),
 			tree);
 	});
+var elm$core$List$cons = _List_cons;
 var elm$core$Array$toList = function (array) {
 	return A3(elm$core$Array$foldr, elm$core$List$cons, _List_Nil, array);
 };
@@ -4522,29 +4522,15 @@ var elm$core$Set$toList = function (_n0) {
 	var dict = _n0;
 	return elm$core$Dict$keys(dict);
 };
-var elm$core$List$cons = _List_cons;
-var elm$core$Basics$le = _Utils_le;
-var elm$core$Basics$sub = _Basics_sub;
-var elm$core$List$drop = F2(
-	function (n, list) {
-		drop:
-		while (true) {
-			if (n <= 0) {
-				return list;
-			} else {
-				if (!list.b) {
-					return list;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs;
-					n = $temp$n;
-					list = $temp$list;
-					continue drop;
-				}
-			}
-		}
+var author$project$Main$initial = {Q: 0, J: _List_Nil, l: author$project$Main$Ready, x: 0, y: _List_Nil};
+var author$project$Main$RandomPhrase = F3(
+	function (target, suggestions, percentage) {
+		return {aG: percentage, aJ: suggestions, F: target};
+	});
+var author$project$Main$blockCount = 4;
+var elm$core$Basics$apR = F2(
+	function (x, f) {
+		return f(x);
 	});
 var elm$core$Basics$add = _Basics_add;
 var elm$core$Basics$gt = _Utils_gt;
@@ -4570,6 +4556,126 @@ var elm$core$List$foldl = F3(
 var elm$core$List$reverse = function (list) {
 	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
 };
+var elm$core$List$foldrHelper = F4(
+	function (fn, acc, ctr, ls) {
+		if (!ls.b) {
+			return acc;
+		} else {
+			var a = ls.a;
+			var r1 = ls.b;
+			if (!r1.b) {
+				return A2(fn, a, acc);
+			} else {
+				var b = r1.a;
+				var r2 = r1.b;
+				if (!r2.b) {
+					return A2(
+						fn,
+						a,
+						A2(fn, b, acc));
+				} else {
+					var c = r2.a;
+					var r3 = r2.b;
+					if (!r3.b) {
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(fn, c, acc)));
+					} else {
+						var d = r3.a;
+						var r4 = r3.b;
+						var res = (ctr > 500) ? A3(
+							elm$core$List$foldl,
+							fn,
+							acc,
+							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+						return A2(
+							fn,
+							a,
+							A2(
+								fn,
+								b,
+								A2(
+									fn,
+									c,
+									A2(fn, d, res))));
+					}
+				}
+			}
+		}
+	});
+var elm$core$List$foldr = F3(
+	function (fn, acc, ls) {
+		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var elm$core$List$concat = function (lists) {
+	return A3(elm$core$List$foldr, elm$core$List$append, _List_Nil, lists);
+};
+var elm$core$Basics$le = _Utils_le;
+var elm$core$Basics$sub = _Basics_sub;
+var elm$core$List$repeatHelp = F3(
+	function (result, n, value) {
+		repeatHelp:
+		while (true) {
+			if (n <= 0) {
+				return result;
+			} else {
+				var $temp$result = A2(elm$core$List$cons, value, result),
+					$temp$n = n - 1,
+					$temp$value = value;
+				result = $temp$result;
+				n = $temp$n;
+				value = $temp$value;
+				continue repeatHelp;
+			}
+		}
+	});
+var elm$core$List$repeat = F2(
+	function (n, value) {
+		return A3(elm$core$List$repeatHelp, _List_Nil, n, value);
+	});
+var author$project$Main$timepoints = elm$core$List$concat(
+	A2(
+		elm$core$List$repeat,
+		author$project$Main$blockCount,
+		_List_fromArray(
+			[0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])));
+var author$project$Phrase$Phrase = F2(
+	function (target, variants) {
+		return {F: target, am: variants};
+	});
+var elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
 var elm$core$List$takeReverse = F3(
 	function (n, list, kept) {
 		takeReverse:
@@ -4711,71 +4817,12 @@ var author$project$Phrase$linesToPhrases = function (list) {
 	}
 };
 var author$project$Phrase$stringData = '\r\n    my watch fell in the water\r\n    my watch fell in the crevasse\r\n    my watch fell on the floor\r\n    my watch fell to the floor\r\n    prevailing wind from the east\r\n    prevailing wind from the Arabian Sea\r\n    prevailing wind from all directions\r\n    prevailing wind from the left\r\n    never too rich and never too thin\r\n    never too rich or too poor\r\n    never too rich and never too poor\r\n    never too rich and not too poor\r\n    I can see the rings on Saturn\r\n    I can see it clearly now\r\n    I can see the whole of this floor\r\n    I can see the excitement in her eyes\r\n    physics and chemistry are hard\r\n    physics and chemistry research\r\n    physics and chemistry\r\n    physics and chemistry are at the center\r\n    my bank account is overdrawn\r\n    my bank account\r\n    my bank account has been frozen\r\n    my bank account was toast\r\n    elections bring out the best\r\n    elections bring out some very interesting results\r\n    elections bring out the party machine\r\n    elections bring out the worst in people\r\n    a problem with the engine\r\n    a problem with Windows?\r\n    a problem with exactly this sort of interpretation\r\n    a problem with this update\r\n    elephants are afraid of mice\r\n    elephants are afraid of them\r\n    elephants are afraid of fire\r\n    elephants are afraid of human beings\r\n    my favorite place to visit\r\n    my favorite place to meet and hang out\r\n    my favorite place to eat\r\n    my favorite place to eat in the world\r\n    three two one zero blast off\r\n    three two one!\r\n    three two one two two threes\r\n    three two one zero\r\n    my favorite subject is psychology\r\n    my favorite subject\r\n    my favorite subject to write about\r\n    my favorite subject of all time\r\n    watch out for low flying objects\r\n    watch out for this next thing\r\n    watch out for low prices and fast delivery!\r\n    watch out for it\r\n    please provide your date of birth\r\n    please provide your correct billing and shipping address\r\n    please provide your shipping address in the comments below\r\n    please provide your name, email address, city\r\n    we run the risk of failure\r\n    we run the University\r\n    we run the numbers again\r\n    we run the world\r\n    prayer in schools offends some\r\n    prayer in schools\r\n    prayer in schools and religious centers\r\n    prayer in schools throughout the world\r\n    he is just like everyone else\r\n    he is just like you\r\n    he is just like him\r\n    he is just like us\r\n    great disturbance in the force\r\n    great disturbance in the Force\r\n    great disturbance in the force of nature\r\n    great disturbance in the fabric of the universe\r\n    you must be getting old\r\n    you must be a lawyer to practice\r\n    you must be logged in and create an account\r\n    you must be kidding me\r\n    the world is a stage\r\n    the world is not the world\r\n    the world is a dangerous place\r\n    the world is a dirty place\r\n    can I skate with sister today\r\n    can I skate with you?\r\n    can I skate with them\r\n    can I skate with you guys on the surface?\r\n    neither a borrower nor a lender be\r\n    neither a borrower nor a lender be allowed\r\n    neither a borrower nor a lender be guilty\r\n    neither a borrower nor a lender\r\n    one heck of a question\r\n    one heck of a show this one\r\n    one heck of a long time\r\n    one heck of a reindeer!\r\n    question that must be answered\r\n    question that must be answered by both students\r\n    question that must be addressed\r\n    question that must be answered: Who is worthy?\r\n    beware the ides of March\r\n    beware the ides of April!\r\n    beware the ides of the sun i\r\n    beware the ides of March, 9\r\n    double double toil and trouble\r\n    double double toil to come up with?\r\n    double double toil\r\n    double double toil and trouble for Mr\r\n    the force is with you\r\n    the force is always with us\r\n    the force is going to be with you\r\n    the force is a strong one\r\n    you are not a jedi yet\r\n    you are not a member of the militia\r\n    you are not a journalist\r\n    you are not a woman, you are I\r\n    an offer you cannot refuse\r\n    an offer you might not want to make\r\n    an offer you-know-whats\r\n    an offer you\r\n    are you talking to me\r\n    are you talking about that story?\r\n    are you talking about where you live?\r\n    are you talking about a change in strategy?\r\n    yes you are very smart\r\n    yes you are definitely not doing anything necessary\r\n    yes you are a man of the people!\r\n    yes you are\r\n    all work and no play\r\n    all work and the jury came out fine\r\n    all work and go out on their own\r\n    all work and should be accessible to all\r\n    hair gel is very greasy\r\n    hair gel is essential for cushioning and cooling!\r\n    hair gel is a good thing\r\n    hair gel is no exception to this rule\r\n    Valium in the economy size\r\n    Valium in the home\r\n    Valium in the US\r\n    Valium in the Workplace and Research\r\n    the facts get in the way\r\n    the facts get in the way of the narrative!\r\n    the facts get kind of messed up\r\n    the facts get stranger and stranger\r\n    did you have a good time\r\n    did you have a party?\r\n    did you have a wet dream last night?\r\n    did you have one of those in 1951?\r\n    space is a high priority\r\n    space is a place, not a person\r\n    space is a representation of world-space\r\n    space is a pretty simple extension of the\r\n    you are a wonderful example\r\n    you are a person, right?\r\n    you are a bad father!\r\n    you are a traitor to humanity\r\n    do not squander your time\r\n    do not squander your time on this\r\n    do not squander my youth\r\n    do not squander their resources in vain\r\n    do not drink too much\r\n    do not drink or eat anything other than water\r\n    do not drink or smoke\r\n    do not drink or do drugs, never\r\n    popularity is desired by all\r\n    popularity is desired or disapproved of\r\n    popularity is desired, without fear\r\n    popularity is desired\r\n    the music is better than it sounds\r\n    the music is better than the words\r\n    the music is better than it was last year\r\n    the music is better than his\r\n    drove my chevy to the levee\r\n    drove my chevy to the dealership\r\n    drove my chevy pickup home\r\n    drove my chevy to the shop\r\n    but the levee was dry\r\n    but the levee is about 15 ft\r\n    but the levee breaches have now closed\r\n    but the levee broke on April 9\r\n    I took the rover from the shop\r\n    I took the rover from home\r\n    I took the rover off the ground\r\n    I took the rover to check it\r\n    movie about a nutty professor\r\n    movie about a zombie, by the way\r\n    movie about a US\r\n    movie about a gangster Godfather\r\n    come and see our new car\r\n    come and see if they are in\r\n    come and see what they have to say\r\n    come and see for yourself\r\n    coming up with killer sound bites\r\n    coming up with his repertory\r\n    coming up with a fix\r\n    coming up with an answer I really care about\r\n    I am going to a music lesson\r\n    I am going to a conference\r\n    I am going to a doctor\r\n    I am going to a gun range\r\n    the opposing team is over there\r\n    the opposing team is playing too aggressively\r\n    the opposing team\r\n    the opposing team members\r\n    soon we will return from the city\r\n    soon we will have made history yet again\r\n    soon we will have a beach-head inland\r\n    soon we will enter an era of revolution\r\n    I am wearing a tie and a jacket\r\n    I am wearing pants\r\n    I am wearing a tie\r\n    I am wearing some of your trousers\r\n    all together in one big pile\r\n    all together in the long days of summer\r\n    all together in the end\r\n    all together in front of a giant screen\r\n    wear a crown with many jewels\r\n    wear a crown with it\r\n    wear a crown with matching mask\r\n    wear a crown with a hood\r\n    there will be some fog tonight\r\n    there will be some upsides for us\r\n    there will be a call at the last number\r\n    there will be an exception to this rule\r\n    I am allergic to bees and peanuts\r\n    I am allergic to penicillins?\r\n    I am allergic to penicillins\r\n    I am allergic to sunlight\r\n    he is still on our team\r\n    he is still very early into his professional career\r\n    he is still on the job\r\n    he is still on board for the St\r\n    the dow jones index has risen\r\n    the dow jones index, the U\r\n    the dow jones for more info\r\n    the dow jones is so sick w him\r\n    my preferred treat is chocolate\r\n    my preferred treat for late afternoon indulgence\r\n    my preferred treat\r\n    my preferred treat of the Irish Sea\r\n    the king sends you to the tower\r\n    the king sends you to him\r\n    the king sends you to spy on me\r\n    the king sends you to do something\r\n    we are subjects and must obey\r\n    we are subjects of the law\r\n    we are subjects and they have no rights\r\n    we are subjects and not the others\r\n    mom made her a turtleneck\r\n    mom made her claim online on Monday\r\n    mom made her first grocery store run\r\n    mom made her way over to the bed\r\n    goldilocks and the three bears\r\n    goldilocks and the three wise men?\r\n    goldilocks and the bears\r\n    goldilocks and the three dwarfs\r\n    the assignment is due today\r\n    the assignment is not\r\n    the assignment is valued at less than 100\r\n    the assignment is not assignable to us\r\n    what you see is what you get\r\n    what you see here is just the beginning\r\n    what you see in the front\r\n    what you see is exactly what you get\r\n    a quarter of a century\r\n    a quarter of all patients presented with symptoms\r\n    a quarter of voters were against the plan\r\n    a quarter of the market\r\n    the store will close at ten\r\n    the store will close at 3 pm\r\n    the store will close, not that we did\r\n    the store will close by the end of July\r\n    head shoulders knees and toes\r\n    head shoulders knees bent or crouched\r\n    head shoulders knees knees knees\r\n    head shoulders knees half bent at ninety degrees\r\n    the laser printer is jammed\r\n    the laser printer\r\n    the laser printer came into the picture\r\n    the laser printer is there\r\n    all good boys deserve fudge\r\n    all good boys, all good girls\r\n    all good boys and girls\r\n    all good boys and sluts\r\n    just in time for the party\r\n    just in time for the Christmas season!\r\n    just in time for the holidays!\r\n    just in time for spring training\r\n    video camera with a zoom lens\r\n    video camera with a good viewfinder\r\n    video camera with a dual-camera setup\r\n    video camera with a wide-angle lens\r\n    what a monkey sees a monkey will do\r\n    what a monkey, a monkey!\r\n    what a monkey sees a monkey\r\n    what a monkey would do to get it\r\n    the back yard of our house\r\n    the back yard of the Chicago White Sox\r\n    the back yard of Washington DC\r\n    the back yard\r\n    this is a very good idea\r\n    this is a serious game\r\n    this is a very good debate to have\r\n    this is a spreadsheet\r\n    reading week is just about here\r\n    reading week is just around the corner\r\n    reading week is just a public relations effort\r\n    reading week is just beginning\r\n    our fax number has changed\r\n    our fax number\r\n    our fax number!\r\n    our fax number is required\r\n    thank you for your help\r\n    thank you for your help and we look forward\r\n    thank you for making this happen!\r\n    thank you for your interest in volunteering\r\n    no exchange without a bill\r\n    no exchange without prior discussion\r\n    no exchange without notice\r\n    no exchange without disclosure\r\n    the early bird gets the worm\r\n    the early bird, the very first\r\n    the early bird gets the choicest\r\n    the early bird saves the best of everything\r\n    this is too much to handle\r\n    this is too big of a deal\r\n    this is too much frustration right now\r\n    this is too much info, my bad!\r\n    the library is closed today\r\n    the library is much more diverse and diverse topics\r\n    the library is part of the company\r\n    the library is, and why I like it!\r\n    Mary had a little lamb\r\n    Mary had a difficult beginning to life\r\n    Mary had a tendency to catch her breath\r\n    Mary had a decision to make\r\n    this is a non profit organization\r\n    this is a brilliant idea!\r\n    this is a non-interventionist country!\r\n    this is a non-sequitur\r\n    healthy food is good for you\r\n    healthy food is better than low-quality food\r\n    healthy food is good for you, right?\r\n    healthy food is a great start\r\n    hands on experience with a job\r\n    hands on experience with various programming languages\r\n    hands on experience with working from home\r\n    hands on experience with the unit\r\n    this watch is too expensive\r\n    this watch is made from high-precision\r\n    this watch is a tough act to follow\r\n    this watch is not like any other\r\n    the capital of our nation\r\n    the capital of the Golden Horde\r\n    the capital of Burundi\r\n    the capital of the region\r\n    travel at the speed of light\r\n    travel at the speed of light!\r\n    travel at the level of language\r\n    travel at the foot of the Swiss Alps\r\n    gas bills are sent monthly\r\n    gas bills are skyrocketing, too\r\n    gas bills are already in effect in Detroit\r\n    gas bills are included in your rent\r\n    life is but a dream\r\n    life is but a fraction of the pain\r\n    life is but a reflection of your spirit\r\n    life is but a fleeting illusion\r\n    take it to the recycling depot\r\n    take it to the max\r\n    take it to the rafters\r\n    take it to a team that deserves it\r\n    sent this by registered mail\r\n    sent this by way of warning\r\n    sent this by the instruction of thy majesty\r\n    sent this by Paige\r\n    fall is my favorite season\r\n    fall is my passion\r\n    fall is my new favorites!\r\n    fall is my favorite movie of all time\r\n    a fox is a very smart animal\r\n    a fox is a part of our education\r\n    a fox is a fox, regardless of shape?\r\n    a fox is walking away\r\n    the kids are very excited\r\n    the kids are going to love me\r\n    the kids are there for other people\r\n    the kids are fine\r\n    parking lot is full of trucks\r\n    parking lot is adjacent to Ford Field\r\n    parking lot is not an outdoor patio\r\n    parking lot is a good choice\r\n    my bike has a flat tire\r\n    my bike has a crankshaft\r\n    my bike has a fairly standard drivetrain\r\n    my bike has a lifetime warranty\r\n    do not walk too quickly\r\n    do not walk through the desert at night\r\n    do not walk in prayer\r\n    do not walk too closely to either of them!\r\n    a duck quacks to ask for food\r\n    a duck quacks to warn you away\r\n    a duck quacks to ask for some help?\r\n    a duck quacks to hide its fear?\r\n    limited warranty of two years\r\n    limited warranty of only 3 days\r\n    limited warranty of no more than one year\r\n    limited warranty of no less than one year\r\n    the four seasons will come\r\n    the four seasons prior to JR\r\n    the four seasons of A Fistful of Dollars?\r\n    the four seasons that I played there\r\n    the sun rises in the east\r\n    the sun rises and sets every day\r\n    the sun rises\r\n    the sun rises and sets\r\n    it is very windy today\r\n    it is very easy to screw up\r\n    it is very much an aspect of beauty\r\n    it is very difficult to understand in French\r\n    do not worry about this\r\n    do not worry!\r\n    do not worry about protecting your credit score\r\n    do not worry\r\n    want to join us for lunch\r\n    want to join you\r\n    want to join us?\r\n    want to join the community\r\n    make my day you sucker\r\n    make my day\r\n    make my day and make my life easier\r\n    make my day, buddy!\r\n    I can play much better now\r\n    I can play much faster than my father\r\n    I can play much better in real games\r\n    I can play much better over time\r\n    she wears too much makeup\r\n    she wears too much make-up\r\n    she wears too much makeup!\r\n    she wears too many make-up, and\r\n    my bare face in the wind\r\n    my bare face in front of them\r\n    my bare face in his eyes\r\n    my bare face in full view of the camera\r\n    lydia wants to go home\r\n    lydia wants to propose a deal\r\n    lydia wants to do her time\r\n    lydia wants to gain more control\r\n    win first prize in the contest\r\n    win first prize\r\n    win first prize in 1917\r\n    win first prize in the 2011 contest\r\n    freud wrote of the ego\r\n    freud wrote of Jesus as a prophet\r\n    freud wrote of WH\r\n    freud wrote of the use of psychedelics\r\n    always cover all the bases\r\n    always cover all of US\r\n    always cover all sorts of stuff\r\n    always cover all options\r\n    can we play cards tonight\r\n    can we play a movie together?\r\n    can we play again?\r\n    can we play that game then?\r\n    get rid of that immediately\r\n    get rid of him, she did\r\n    get rid of\r\n    get rid of it completely\r\n    the sum of the parts\r\n    the sum of elements of the permutations\r\n    the sum of dollars and cents\r\n    the sum of the numbers\r\n    they love to yap about nothing\r\n    they love to eat meat, it seems\r\n    they love to talk about\r\n    they love to yap on about\r\n    he played a pimp in that movie\r\n    he played a role in the story\r\n    he played a role in that\r\n    he played a big role in that\r\n    I skimmed through your proposal\r\n    I skimmed through the list of proposals\r\n    I skimmed through the text for details\r\n    I skimmed through the notes\r\n    he was wearing a sweatshirt\r\n    he was wearing all leather armor\r\n    he was wearing a red pajama top\r\n    he was wearing at the time\r\n    no more war no more bloodshed\r\n    no more war\r\n    no more war no more death no more suffering!\r\n    no more war no more terrorism\r\n    I will meet you at noon\r\n    I will meet you there\r\n    I will meet with Sen\r\n    I will meet you when you arrive\r\n    I want to hold your hand\r\n    I want to hold a press conference\r\n    I want to thank everyone for their strong support!\r\n    I want to know how the plot develops\r\n    superman never wore a mask\r\n    superman never wore pajamas, right???\r\n    superman never wore his Superman costume\r\n    superman never wore capes\r\n    I listen to the tape everyday\r\n    I listen to the symphony every day\r\n    I listen to the beach\r\n    I listen to the words of Mr\r\n    seasoned golfers love the game\r\n    seasoned golfers love to do\r\n    seasoned golfers love\r\n    seasoned golfers love their clubs\r\n    he cooled off after she left\r\n    he cooled off, and there were no cuts\r\n    he cooled off for an hour\r\n    he cooled off and regained his composure\r\n    my dog sheds his hair\r\n    my dog sheds his fur once a week\r\n    my dog sheds all sorts of hair\r\n    my dog sheds pretty much every week\r\n    join us on the patio\r\n    join us on Tuesday at 3:00pm\r\n    join us on the forum\r\n    join us on Facebook here\r\n    these cookies are so amazing\r\n    these cookies are no longer available\r\n    these cookies are gluten free and refined sugar free\r\n    these cookies are the best!\r\n    I can still feel your presence\r\n    I can still do it\r\n    I can still remember it\r\n    I can still see the place\r\n    the dog will bite you\r\n    the dog will not bite you\r\n    the dog will know where to go\r\n    the dog will be fine\r\n    where did you get that tie\r\n    where did you get it?\r\n    where did you get the book?\r\n    where did you get that robe you wear?\r\n    what a lovely red jacket\r\n    what a lovely way of keeping score\r\n    what a lovely day!\r\n    what a lovely library it is\r\n    do you like to shop on Sunday\r\n    do you like this recipe?\r\n    do you like jazz?\r\n    do you like your grass cut?\r\n    I spilled coffee on the carpet\r\n    I spilled coffee on one of my clothes\r\n    I spilled coffee on you\r\n    I spilled coffee all over the place\r\n    the largest of the five oceans\r\n    the largest of the five spaceports\r\n    the largest of the US\r\n    the largest of the Chinese cities\r\n    shall we play a round of cards\r\n    shall we play it?\r\n    shall we play this game again?\r\n    shall we play games with these poor ducks\r\n    my mother makes good cookies\r\n    my mother makes everything from scratch\r\n    my mother makes a very good custard\r\n    my mother makes the bread every day\r\n    do a good deed to someone\r\n    do a good deed every now and then\r\n    do a good deed?\r\n    do a good job and keep him happy\r\n    quick there is someone knocking\r\n    quick there is plenty of nice views\r\n    quick there is no time for heartbreak\r\n    quick there is a problem\r\n    flashing red light means stop\r\n    flashing red light\r\n    flashing red light of a speeding car\r\n    flashing red light on her left wrist\r\n    where did I leave my glasses\r\n    where did I find you?\r\n    where did I put it?\r\n    where did I get all that?\r\n    on the way to the cottage\r\n    on the way down\r\n    on the way of abolishing the monarchy\r\n    on the way of his life\r\n    a lot of chlorine in the water\r\n    a lot of chlorine in their water\r\n    a lot of chlorine in the water is toxic\r\n    a lot of books\r\n    do not drink the water\r\n    do not drink in case of fire\r\n    do not drink a glass of water before meals\r\n    do not drink too many liquids\r\n    my car always breaks in the winter\r\n    my car always breaks in front of other cars\r\n    my car always breaks in its first week\r\n    my car always breaks in half\r\n    public transit is much faster\r\n    public transit is not an alternative to cars\r\n    public transit is critical to affordable housing development\r\n    public transit is part of society\r\n    zero in on the facts\r\n    zero in on top of it\r\n    zero in on the real issue at hand\r\n    zero in on him\r\n    make up a few more phrases\r\n    make up a few minutes here and there\r\n    make up a large portion of it\r\n    make up a few\r\n    my fingers are very cold\r\n    my fingers are all covered by white fur\r\n    my fingers are much smaller than my thumb\r\n    my fingers are tingly all over again\r\n    the price of gas is high\r\n    the price of gas is too damn high?\r\n    the price of the product will come down\r\n    the price of gas has to come down\r\n    the winner of the race\r\n    the winner of the 1995 US\r\n    the winner of the Aug\r\n    the winner of the Oct\r\n    go out for some pizza and beer\r\n    go out for some fresh air\r\n    go out for some food\r\n    go out for some beer\r\n    effort is what it will take\r\n    effort is what it boils down to\r\n    effort is what it sounds like\r\n    effort is what we try to focus on\r\n    where can my little dog be\r\n    where can my companion support go?\r\n    where can my little girl go if she wants\r\n    where can my little wiggly soul go!!\r\n    if you were not so stupid\r\n    if you were unlucky enough to have to choose!\r\n    if you were already in my top three\r\n    if you were an architect at the time\r\n    not quite so smart as you think\r\n    not quite so smart\r\n    not quite so smart, of course\r\n    not quite so smart after all\r\n    do you like to go camping\r\n    do you like to play the guitar?\r\n    do you like to play Ingress?\r\n    do you like this?\r\n    this person is a disaster\r\n    this person is going to get shot\r\n    this person is who he says he is\r\n    this person is going to be so fucked up\r\n    the imagination of the nation\r\n    the imagination of the man, ie\r\n    the imagination of the thinker\r\n    the imagination of the feminist movement\r\n    universally understood to be wrong\r\n    universally understood to be in compliance\r\n    universally understood to mean the ancients\r\n    universally understood to be male\r\n    listen to five hours of opera\r\n    listen to five hours a day\r\n    listen to five hours per game\r\n    listen to five hours of your favorite podcasts?\r\n    an occasional taste of chocolate\r\n    an occasional taste anyway\r\n    an occasional taste of distrust in my stomach\r\n    an occasional taste\r\n    the protesters blocked all traffic\r\n    the protesters blocked the freeway outside the airport\r\n    the protesters blocked traffic on the highway\r\n    the protesters blocked the main entrance to Beijing\r\n    the acceptance speech was boring\r\n    the acceptance speech of their victors\r\n    the acceptance speech is beside the point\r\n    the acceptance speech at graduation\r\n    work hard to reach the summit\r\n    work hard to reach their goals\r\n    work hard to reach the right people\r\n    work hard to reach consensus among all parties\r\n    a little encouragement is needed\r\n    a little encouragement from you on the way\r\n    a little encouragement is always a good thing\r\n    a little encouragement for it\r\n    stiff penalty for staying out late\r\n    stiff penalty for staying out of sight\r\n    stiff penalty for staying too late\r\n    stiff penalty for staying out so late\r\n    exceed the maximum speed limit\r\n    exceed the maximum given by the program\r\n    exceed the maximum time allowed\r\n    exceed the maximum number\r\n    in sharp contrast to your words\r\n    in sharp contrast to those of Western producers\r\n    in sharp contrast to the West Bank\r\n    in sharp contrast to China\r\n    this leather jacket is too warm\r\n    this leather jacket is really starting to look worn\r\n    this leather jacket is the best jacket to pull\r\n    this leather jacket is going to be fine\r\n    consequences of a wrong turn\r\n    consequences of a failure to act\r\n    consequences of a growing criminal world\r\n    consequences of a foreign terrorist attack\r\n    this mission statement is baloney\r\n    this mission statement is far from complete\r\n    this mission statement sounded good\r\n    this mission statement is kind of vague\r\n    you will loose your voice\r\n    you will loose your arms or legs\r\n    you will loose everything on the spot\r\n    you will loose your business\r\n    every apple from every tree\r\n    every apple from Oklahoma goes through here\r\n    every apple from a bitter apple tree?\r\n    every apple from that sweet tree must be smashed\r\n    are you sure you want this\r\n    are you sure?\r\n    are you sure you want to go?\r\n    are you sure you want to do this?\r\n    the fourth edition was better\r\n    the fourth edition of the US\r\n    the fourth edition, p\r\n    the fourth edition of the Star Trek Data book\r\n    beautiful paintings in the gallery\r\n    beautiful paintings in her dining room\r\n    beautiful paintings in their own right\r\n    beautiful paintings in a wonderful setting\r\n    a yard is almost as long as a meter\r\n    a yard is almost as long as the Ark\r\n    a yard is almost always filled with sun\r\n    a yard is almost completely covered in ash\r\n    destruction of the rain forest\r\n    destruction of the environment\r\n    destruction of the state\r\n    destruction of the planet\r\n    I like to play tennis\r\n    I like to play with my hair\r\n    I like to play what we play\r\n    I like to win\r\n    acutely aware of her good looks\r\n    acutely aware of her surroundings\r\n    acutely aware of her disappointment\r\n    acutely aware of all that involved\r\n    you want to eat your cake\r\n    you want to eat something very different from nothing\r\n    you want to go to a club on Tuesday\r\n    you want to eat a crap sandwich?\r\n    a glance in the right direction\r\n    a glance in the camera, eyes narrowed\r\n    a glance in the rear-view mirror\r\n    a glance in the direction of the play\r\n    I just cannot figure this out\r\n    I just cannot figure out the problem\r\n    I just cannot figure out why\r\n    I just cannot figure it out\r\n    an airport is a very busy place\r\n    an airport is a very major transport hub\r\n    an airport is unable to handle all arrivals\r\n    an airport is now held by the militants\r\n    mystery of the lost lagoon\r\n    mystery of the image\r\n    mystery of the Great Depression\r\n    mystery of the Century\r\n    is there any indication of this\r\n    is there any truth to it?\r\n    is there any of the Old World?\r\n    is there any comparison?\r\n    the chamber makes important decisions\r\n    the chamber makes use of a different technology\r\n    the chamber makes sense\r\n    the chamber makes a lot of noise\r\n    this phenomenon will never occur\r\n    this phenomenon will come to an end\r\n    this phenomenon will continue for decades to come\r\n    this phenomenon will take some time to filter out\r\n    obligations must be met first\r\n    obligations must be complied with\r\n    obligations must be carried out\r\n    obligations must be addressed\r\n    valid until the end of the year\r\n    valid until the end of 2016\r\n    valid until the end of the month\r\n    valid until the end of the next season\r\n    file all complaints in writing\r\n    file all complaints were filed\r\n    file all complaints made by young women\r\n    file all complaints\r\n    a picture is worth many words\r\n    a picture is worth a thousand words\r\n    a picture is worth 1,000 words\r\n    a picture is worth a thousand words!\r\n    this camera takes nice photographs\r\n    this camera takes pictures all day every day\r\n    this camera takes pictures, too\r\n    this camera takes great photos\r\n    it looks like a shack\r\n    it looks like they are in full swing\r\n    it looks like it could be a bit smarter\r\n    it looks like it will be just that soon\r\n    the dog buried the bone\r\n    the dog buried in the garden\r\n    the dog buried in the cemetary?\r\n    the dog buried his head in the sand\r\n    this equation is too complicated\r\n    this equation is different depending on your brand\r\n    this equation is wrong\r\n    this equation is not going to go away\r\n    express delivery is very fast\r\n    express delivery is available during normal business hours\r\n    express delivery is made\r\n    express delivery is expected within 2 business days\r\n    I will put on my glasses\r\n    I will put them in a time machine!\r\n    I will put our best foot forward\r\n    I will put on another show, I promise!!\r\n    a touchdown in the last minute\r\n    a touchdown in the first quarter\r\n    a touchdown in the second quarter for the first\r\n    a touchdown in the fourth quarter\r\n    the treasury department is broke\r\n    the treasury department said in a statement Thursday\r\n    the treasury department is run out of Whitehall\r\n    the treasury department\r\n    a good response to the question\r\n    a good response to my concerns\r\n    a good response to government intrusiveness\r\n    a good response\r\n    the bathroom is good for reading\r\n    the bathroom is good for a snooze\r\n    the bathroom is good for you\r\n    the bathroom is probably the same\r\n    the generation gap gets wider\r\n    the generation gap is not so big anymore\r\n    the generation gap is deeply troubling\r\n    the generation gap\r\n    prepare for the exam in advance\r\n    prepare for the upcoming election\r\n    prepare for the least significant bits\r\n    prepare for the unknown future\r\n    bank transaction was not registered\r\n    bank transaction was an open-ended promise to\r\n    bank transaction was made in February\r\n    bank transaction was intended to bolster Mr\r\n    your etiquette needs some work\r\n    your etiquette needs to be that much better\r\n    your etiquette needs a reality check\r\n    your etiquette needs\r\n    house with new electrical panel\r\n    house with new arrivals in town over the holiday\r\n    house with new items within 10 business days\r\n    house with new food items\r\n    our silver anniversary is coming\r\n    our silver anniversary self-badge\r\n    our silver anniversary toast with Donald J\r\n    our silver anniversary\r\n    the presidential suite is very busy\r\n    the presidential suite\r\n    the presidential suite is located on the second level\r\n    the presidential suite is very nice\r\n    the punishment should fit the crime\r\n    the punishment should be proportional to the crime\r\n    the punishment should be lenient\r\n    the punishment should be sufficient for them\r\n    sharp cheese keeps the mind sharp\r\n    sharp cheese keeps the patties moist\r\n    sharp cheese keeps the dough crispy on the edges!\r\n    sharp cheese keeps the sandwich soft and moist\r\n    the registration period is over\r\n    the registration period runs from Feb\r\n    the registration period will remain open until February 28\r\n    the registration period was opened in the first quarter\r\n    the objective of the exercise\r\n    the objective of it is to control the flow\r\n    the objective of investigation is to know the truth\r\n    the objective of all physics\r\n    historic meeting without a result\r\n    historic meeting without talking about it\r\n    historic meeting without any shortage of participants\r\n    historic meeting without violence\r\n    good at addition and subtraction\r\n    good at addition or subtraction\r\n    good at addition\r\n    good at addition work\r\n    six daughters and seven sons\r\n    six daughters and one son\r\n    six daughters and seven grandchildren\r\n    six daughters and four sons\r\n    a thoroughly disgusting thing to say\r\n    a thoroughly disgusting and distasteful attack\r\n    a thoroughly disgusting thing\r\n    a thoroughly disgusting concoction\r\n    the minimum amount of time\r\n    the minimum amount of time needed to create\r\n    the minimum amount required to stay alive\r\n    the minimum amount you will need to come up\r\n    a very traditional way to dress\r\n    a very traditional way of doing things\r\n    a very traditional way of seeing the world\r\n    a very traditional way\r\n    the aspirations of a nation\r\n    the aspirations of women, their hopes and fears\r\n    the aspirations of the dispossessed working class\r\n    the aspirations of one of the parties\r\n    medieval times were very hard\r\n    medieval times were incredibly prolific\r\n    medieval times were two very different beasts\r\n    medieval times were far superior to us\r\n    a security force of eight thousand\r\n    a security force of 30,000\r\n    a security force of some two thousand men!\r\n    a security force of 1,000 soldiers\r\n    there are winners and losers\r\n    there are winners and losers here\r\n    there are winners and there are losers\r\n    there are winners and losers out there\r\n    the voters turfed him out\r\n    the voters turfed him out of office\r\n    the voters turfed him out on Election Day!\r\n    the voters turfed out George W\r\n    pay off a mortgage for a house\r\n    pay off a mortgage or car loan\r\n    pay off a mortgage or fix a car\r\n    pay off a mortgage for two years?\r\n    the collapse of the Roman empire\r\n    the collapse of US\r\n    the collapse of our institutions\r\n    the collapse of Lehman Brothers in September 2008\r\n    did you see that spectacular explosion\r\n    did you see that attack?\r\n    did you see the video?\r\n    did you see that Deadpool movie today?\r\n    keep receipts for all your expenses\r\n    keep receipts for compliance with US\r\n    keep receipts for all cash transactions\r\n    keep receipts for all of its transactions\r\n    the assault took six months\r\n    the assault took place around 230pm\r\n    the assault took place on Sunday, April 30\r\n    the assault took place on Nov\r\n    get your priorities in order\r\n    get your priorities straight\r\n    get your priorities straight before you commit\r\n    get your priorities in order, Mr\r\n    traveling requires a lot of fuel\r\n    traveling requires a lot of money\r\n    traveling requires a lot of energy\r\n    traveling requires a lot of planning, time\r\n    longer than a football field\r\n    longer than a third\r\n    longer than a two-hour episode\r\n    longer than a third of a second\r\n    a good joke deserves a good laugh\r\n    a good joke\r\n    a good joke and it would be funny\r\n    a good joke deserves a good reaction\r\n    the union will go on strike\r\n    the union will go ahead with the strike\r\n    the union will go down, too\r\n    the union will make sure there is no job\r\n    never mix religion and politics\r\n    never mix religion and economics\r\n    never mix religion with politics\r\n    never mix religion and politics in your rhetoric\r\n    interactions between men and women\r\n    interactions between men and women in society\r\n    interactions between men\r\n    interactions between men and young people\r\n    where did you get such a silly idea\r\n    where did you get such knowledge?\r\n    where did you get such a letter?\r\n    where did you get such a lovely selection?\r\n    it should be sunny tomorrow\r\n    it should be the same across the board\r\n    it should be a non sequitur\r\n    it should be obvious by now\r\n    a psychiatrist will help you\r\n    a psychiatrist will be his primary therapist\r\n    a psychiatrist will do\r\n    a psychiatrist will assess your condition\r\n    you should visit to a doctor\r\n    you should visit to visit him\r\n    you should visit to get your paws on one!\r\n    you should visit the discussion page for this post\r\n    you must make an appointment\r\n    you must make a decision for yourself\r\n    you must make the decisions yourself\r\n    you must make room for the next row\r\n    the fax machine is broken\r\n    the fax machine\r\n    the fax machine in the kitchen?\r\n    the fax machine in his living room\r\n    players must know all the rules\r\n    players must know these facts by now\r\n    players must know all of their move-offs\r\n    players must know when to play hardball\r\n    a dog is the best friend of a man\r\n    a dog is the best friend of a person\r\n    a dog is the best restaurant in town\r\n    a dog is the best dog\r\n    would you like to come to my house\r\n    would you like to come to the races?\r\n    would you like to have lunch with me?\r\n    would you like to try one yourself?\r\n    February has an extra day\r\n    February has an official start date of January 5\r\n    February has an upper limit of 25 February\r\n    February has an interesting mix of games\r\n    do not feel too bad about it\r\n    do not feel too bad about this part\r\n    do not feel too bad about that, though!!\r\n    do not feel too well today\r\n    this library has many books\r\n    this library has in common with other frameworks\r\n    this library has been in development since 2003\r\n    this library has been removed from this project\r\n    that is a very odd question\r\n    that is a good word to think about after\r\n    that is a rare occurrence these days\r\n    that is a very good idea\r\n    a feeling of complete exasperation\r\n    a feeling of powerlessness and helplessness\r\n    a feeling of being in orbit around the comet\r\n    a feeling of ecstasy\r\n    no kissing in the library\r\n    no kissing in the water here!\r\n    no kissing in that city\r\n    no kissing in public\r\n    that agreement is rife with problems\r\n    that agreement is rife with potential pitfalls\r\n    that agreement is rife with contradictions\r\n    that agreement is rife with unfairness\r\n    vote according to your conscience\r\n    vote according to the region\r\n    vote according to your preferences\r\n    vote according to its own values\r\n    my favourite sport is racketball\r\n    my favourite sport when I was a kid\r\n    my favourite sport\r\n    my favourite sport to watch is football\r\n    sad to hear that news\r\n    sad to hear it was taken so easily!\r\n    sad to hear the story\r\n    sad to hear how well they played\r\n    the gun discharged by accident\r\n    the gun discharged and hit me pretty good\r\n    the gun discharged, striking and killing Mrs\r\n    the gun discharged while in the holster\r\n    one of the poorest nations\r\n    one of the people I talked to\r\n    one of the best moments of the series\r\n    one of the most important differences between L\r\n    the algorithm is too complicated\r\n    the algorithm is broken and I have no hope\r\n    the algorithm is already in place!\r\n    the algorithm is more or less optimal\r\n    that land is owned by the government\r\n    that land is owned by the federal government\r\n    that land is owned by the state\r\n    that land is owned by the public\r\n    burglars never leave their business card\r\n    burglars never leave their dwellings again\r\n    burglars never leave their homes\r\n    burglars never leave traces\r\n    the fire blazed all weekend\r\n    the fire blazed within my breast\r\n    the fire blazed all around him\r\n    the fire blazed all day long\r\n    if diplomacy does not work\r\n    if diplomacy does work, it takes time\r\n    if diplomacy does not work, force will be\r\n    if diplomacy does not work out\r\n    the rationale behind the decision\r\n    the rationale behind the wall is quite simple\r\n    the rationale behind this decision is less than subtle\r\n    the rationale behind killing her?\r\n    the cat has a pleasant temperament\r\n    the cat has gone back to sleep\r\n    the cat has a cat in the house\r\n    the cat has a mind of its own\r\n    our housekeeper does a thorough job\r\n    our housekeeper does the washing and cooking\r\n    our housekeeper does not work\r\n    our housekeeper does everything\r\n    her majesty visited our country\r\n    her majesty visited the capital\r\n    her majesty visited Antwerp\r\n    her majesty visited Queen Victoria in 1898\r\n    these barracks are big enough\r\n    these barracks are completely undisturbed\r\n    these barracks are starting to look the same\r\n    these barracks are quite large\r\n    sing the gospel and the blues\r\n    sing the gospel\r\n    sing the gospel?\r\n    sing the gospel in a businesslike manner\r\n    he underwent triple bypass surgery\r\n    he underwent triple coronary bypass surgery Oct\r\n    he underwent triple bypass surgery in 2009\r\n    he underwent triple knee replacement surgery in 2011\r\n    the hopes of a new organization\r\n    the hopes of a child\r\n    the hopes of the White House and Washington\r\n    the hopes of a doomed marriage\r\n    peering through a small hole\r\n    peering through a long stretch of glass\r\n    peering through a thick wall of clouds\r\n    peering through a skyscraper in Hong Kong\r\n    rapidly running short on words\r\n    rapidly running short of cash\r\n    rapidly running short on resources\r\n    rapidly running short of a candidate\r\n    it is difficult to concentrate\r\n    it is difficult to describe him\r\n    it is difficult for them to understand\r\n    it is difficult to come close to fuming\r\n    give me one spoonful of coffee\r\n    give me one word of advice, Mr\r\n    give me one of your autographs!\r\n    give me one word to describe it\r\n    two or three cups of coffee\r\n    two or three cups of boiling water\r\n    two or three cups per day\r\n    two or three cups at a time\r\n    just like it says on the can\r\n    just like it always has been\r\n    just like it says in the book\r\n    just like it says on the label\r\n    electric cars need big fuel cells\r\n    electric cars need massive changes to their energy strategies\r\n    electric cars need as few components as possible\r\n    electric cars need space\r\n    the plug does not fit the socket\r\n    the plug does not go in\r\n    the plug does not come on as easily\r\n    the plug does not come out\r\n    we dine out on the weekends\r\n    we dine out on each other\r\n    we dine out on who they want\r\n    we dine out on our own\r\n    get aboard the ship is leaving\r\n    get aboard the bandwagon of geopolitics\r\n    get aboard the ship and make some music\r\n    get aboard the ship\r\n    the water was monitored daily\r\n    the water was cold and dark\r\n    the water was gone, we could see it\r\n    the water was nice and cold\r\n    a big scratch on the tabletop\r\n    a big scratch\r\n    a big scratch somewhere, waiting to disappear\r\n    a big scratch, huh?\r\n    salesmen must make their monthly quota\r\n    salesmen must make their move\r\n    salesmen must make\r\n    salesmen must make money\r\n    saving that child was an heroic effort\r\n    saving that child was the easy part\r\n    saving that child was part of the motivation\r\n    saving that child was the first thing that came\r\n    granite is the hardest of all rocks\r\n    granite is the hardest material on Earth\r\n    granite is the hardest of the three\r\n    granite is the hardest of all stone\r\n    bring the offenders to justice\r\n    bring the offenders to justice and prosecute them appropriately?\r\n    bring the offenders to a different site\r\n    bring the offenders into the community and send them\r\n    every Saturday he folds the laundry\r\n    every Saturday he reaps the rewards\r\n    every Saturday he folds his blanket, puts it\r\n    every Saturday he arrived at my home\r\n    careless driving results in a fine\r\n    careless driving results in many traffic fatalities\r\n    careless driving results in loss of life\r\n    careless driving results in fatal crashes\r\n    microscopes make small things look big\r\n    microscopes make small things larger\r\n    microscopes make small things look huge\r\n    microscopes make small things seem large\r\n    a coupon for a free sample\r\n    a coupon for example will always give you 20\r\n    a coupon for a free test kit\r\n    a coupon for a week of free shipping\r\n    fine but only in moderation\r\n    fine but only slightly salty in flavor\r\n    fine but only to legal age drinkers\r\n    fine but only up to 2 inches in depth?\r\n    a subject one can really enjoy\r\n    a subject one can empathize with\r\n    a subject one can get hooked on\r\n    a subject one can never fully understand\r\n    that sticker needs to be validated\r\n    that sticker needs to go\r\n    that sticker needs to be redone\r\n    that sticker needs the numbers split, for example\r\n    the fire raged for an entire month\r\n    the fire raged\r\n    the fire raged for over an hour\r\n    the fire raged for eight days and nights\r\n    one never takes too many precautions\r\n    one never takes his eyes off the prize\r\n    one never takes his eyes from his enemy\r\n    one never takes his eye off her\r\n    labour unions know how to organize\r\n    labour unions know how to work together\r\n    labour unions know how to fight\r\n    labour unions know how to work together better\r\n    people blow their horn a lot\r\n    people blow their money on this crap\r\n    people blow their nose with poppers\r\n    people blow their horn and scream joyously?\r\n    a correction had to be published\r\n    a correction had led me astray\r\n    a correction had taken place\r\n    a correction had been made\r\n    I like baroque and classical music\r\n    I like baroque music\r\n    I like baroque stuff a lot\r\n    I like baroque design\r\n    be discreet about your meeting\r\n    be discreet about it\r\n    be discreet about the content of their work\r\n    be discreet about this world\r\n    meet tomorrow in the lavatory\r\n    meet tomorrow in Washington, DC\r\n    meet tomorrow in Dusseldorf\r\n    meet tomorrow in Kenai, Alaska\r\n    suburbs are sprawling up everywhere\r\n    suburbs are sprawling\r\n    suburbs are sprawling suburbs\r\n    suburbs are sprawling and sprawling cities\r\n    shivering is one way to keep warm\r\n    shivering is one way to do this\r\n    shivering is one way to relieve this\r\n    shivering is one way to do it\r\n    try to enjoy your maternity leave\r\n    try to enjoy them\r\n    try to enjoy yourself\r\n    try to enjoy the beginning of the end\r\n    the ventilation system is broken\r\n    the ventilation system\r\n    the ventilation system is very tiny\r\n    the ventilation system is simple and works fine\r\n    dinosaurs have been extinct for ages\r\n    dinosaurs have been extinct for six million years\r\n    dinosaurs have been around for 80 million years!\r\n    dinosaurs have been extinct for 60 million years\r\n    an inefficient way to heat a house\r\n    an inefficient way of doing things\r\n    an inefficient way of solving the problem\r\n    an inefficient way to do things\r\n    the bus was very crowded\r\n    the bus was empty, according to court papers\r\n    the bus was like a tornado\r\n    the bus was so quiet and cool\r\n    an injustice is committed every day\r\n    an injustice is perpetrated against anyone\r\n    an injustice is also at work here\r\n    an injustice is well worth redress\r\n    the coronation was very exciting\r\n    the coronation was an Act of Parliament\r\n    the coronation was a farce\r\n    the coronation was in full swing\r\n    look in the syllabus for the course\r\n    look in the syllabus for Bio 11?\r\n    look in the syllabus for further details\r\n    look in the syllabus for the school\r\n    rectangular objects have four sides\r\n    rectangular objects have three faces\r\n    rectangular objects have been modeled in it\r\n    rectangular objects have a defined aspect ratio\r\n    prescription drugs require a note\r\n    prescription drugs require special licenses\r\n    prescription drugs require approval by the FDA\r\n    prescription drugs require prescriptions from physicians\r\n    the insulation is not working\r\n    the insulation is what you care about\r\n    the insulation is as good as it gets\r\n    the insulation is not airtight at all\r\n    nothing finer than discovering a treasure\r\n    nothing finer than discovering that it does\r\n    nothing finer than discovering a scimitar\r\n    nothing finer than discovering a beautiful new land\r\n    our life expectancy has increased\r\n    our life expectancy in Latin America is just 65\r\n    our life expectancy is about 68 years\r\n    our life expectancy was down significantly\r\n    the cream rises to the top\r\n    the cream rises on the top\r\n    the cream rises and falls with the season\r\n    the cream rises to the top of the tube\r\n    the high waves will swamp us\r\n    the high waves will never be strong again\r\n    the high waves will come straight at you\r\n    the high waves will hit them in the chest\r\n    the treasurer must balance her books\r\n    the treasurer must balance the budget every year\r\n    the treasurer must balance the deficit\r\n    the treasurer must balance the books by April 15\r\n    the location of the crime\r\n    the location of the building\r\n    the location of the right of way\r\n    the location of these artifacts is unknown\r\n    the chancellor was very boring\r\n    the chancellor was wrong to take this course\r\n    the chancellor was also referring to Stephen King\r\n    the chancellor was a big supporter\r\n    the accident scene is a shrine for fans\r\n    the accident scene is a shrine to grief\r\n    the accident scene is a shrine to people\r\n    the accident scene is a mess\r\n    a tumor is OK provided it is benign\r\n    a tumor is OK or not\r\n    a tumor is OK\r\n    a tumor is OK to be close to\r\n    please take a bath this month\r\n    please take a look\r\n    please take a bath and get a massage\r\n    please take a bath and go brush your teeth!\r\n    rent is paid at the beginning of the month\r\n    rent is paid\r\n    rent is paid at least twice a week\r\n    rent is paid to us by other publishers\r\n    for murder you get a long prison sentence\r\n    for murder you will receive the death penalty\r\n    for murder you get a life sentence\r\n    for murder you get a sentence of between 10\r\n    a much higher risk of getting cancer\r\n    a much higher risk of side effects\r\n    a much higher risk of AIDS\r\n    a much higher risk of high blood pressure\r\n    quit while you are ahead\r\n    quit while you are doing it\r\n    quit while you can\r\n    quit while you are on something else\r\n    knee bone is connected to the thigh bone\r\n    knee bone is connected to the hip\r\n    knee bone is connected to the ankle\r\n    knee bone is not one of them\r\n    safe to walk the streets in the evening\r\n    safe to walk away without a record\r\n    safe to walk the streets in New Brunswick\r\n    safe to walk around in\r\n    luckily my wallet was found\r\n    luckily my wallet is paid in bitcoin!\r\n    luckily my wallet does not do this\r\n    luckily my wallet was large enough\r\n    one hour is allotted for questions\r\n    one hour is not enough to find the demo\r\n    one hour is better than a dozen\r\n    one hour is enough\r\n    so you think you deserve a raise\r\n    so you think you are so powerful\r\n    so you think you deserve the best!\r\n    so you think you deserve what you get\r\n    they watched the entire movie\r\n    they watched the whole episode\r\n    they watched the fuck out of it\r\n    they watched the whole thing in silence\r\n    good jobs for those with education\r\n    good jobs for American workers\r\n    good jobs for the jobless\r\n    good jobs for our citizens\r\n    jumping right out of the water\r\n    jumping right out of the gates\r\n    jumping right out of my head\r\n    jumping right out of bed\r\n    the trains are always late\r\n    the trains are a disaster\r\n    the trains are coming to get you\r\n    the trains are on the way back to Japan\r\n    sit at the front of the bus\r\n    sit at the head of the table\r\n    sit at the gilded altar for it\r\n    sit at the door ready for my husband\r\n    do you prefer a window seat\r\n    do you prefer a different device?\r\n    do you prefer a slow cooker?\r\n    do you prefer a rougher texture?\r\n    the food at this restaurant\r\n    the food at the store was great\r\n    the food at restaurants is high quality\r\n    the food at the end of the road\r\n    the elevator door appears to be stuck\r\n    the elevator door appears on the screen\r\n    the elevator door slammed to a halt\r\n    the elevator door opens into the hall\r\n    raindrops keep falling on my head\r\n    raindrops keep falling on you\r\n    raindrops keep falling on my face\r\n    raindrops keep falling throughout the day\r\n    spill coffee on the carpet\r\n    spill coffee on an outdoor picnic table\r\n    spill coffee on an everyday basis\r\n    spill coffee on the pavement\r\n    an excellent way to communicate\r\n    an excellent way to improve your athletic performance\r\n    an excellent way to solve this problem\r\n    an excellent way to test it\r\n    faster than a speeding bullet\r\n    faster than a sine wave\r\n    faster than a credit card\r\n    faster than a bolt-action rifles\r\n    nothing wrong with his style\r\n    nothing wrong with your tummy\r\n    nothing wrong with doing what you want\r\n    nothing wrong with Mr\r\n    arguing with the boss is futile\r\n    arguing with the woman\r\n    arguing with the NSA on these issues?\r\n    arguing with the size of the bill\r\n    taking the train is usually faster\r\n    taking the train to the capital in January\r\n    taking the train back from the airport\r\n    taking the train\r\n    what goes up must come down\r\n    what goes up must come down, and vice\r\n    what goes up must come down, you see\r\n    what goes up, must come down\r\n    be persistent to win a strike\r\n    be persistent to draw some attention\r\n    be persistent to the last\r\n    be persistent to reduce the number of ads\r\n    why do you ask silly questions\r\n    why do you need that?\r\n    why do you ask me?\r\n    why do you think we named it that!?\r\n    that is a very nasty cut\r\n    that is a very serious matter\r\n    that is a very, very bad idea\r\n    that is a very sad day for us\r\n    learn to walk before you run\r\n    learn to walk up the steps with ease\r\n    learn to walk before you learn to run\r\n    learn to walk like everyone else\r\n    insurance is important for bad drivers\r\n    insurance is important for many Americans\r\n    insurance is important for many people\r\n    insurance is important for everyone\r\n    traveling to conferences is fun\r\n    traveling to conferences and public speaking engagements\r\n    traveling to conferences in Tokyo and Beijing\r\n    traveling to conferences or conventions in China\r\n    do you get nervous when you speak\r\n    do you get nervous when you get older?\r\n    do you get nervous when you do yoga?\r\n    do you get nervous when you change it?\r\n    pumping helps if the roads are slippery\r\n    pumping helps if the roads are dry\r\n    pumping helps if they are getting enough moisture\r\n    pumping helps if the sponge has dried out?\r\n    parking tickets can be challenged\r\n    parking tickets can be found online here\r\n    parking tickets can be purchased online\r\n    parking tickets can be found here!\r\n    find a nearby parking spot\r\n    find a nearby restaurant and eat\r\n    find a nearby bar and spend the night\r\n    find a nearby dog park\r\n    gun powder must be handled with care\r\n    gun powder must be sold separately\r\n    gun powder must be poured over it\r\n    gun powder must be kept clean and dry\r\n    just what the doctor ordered\r\n    just what the Russian hackers intended all along\r\n    just what the man wanted\r\n    just what the US\r\n    a rattle snake is very poisonous\r\n    a rattle snake is an enigma\r\n    a rattle snake and no rattles\r\n    a rattle snake in Africa\r\n    weeping willows are found near water\r\n    weeping willows are found in clusters\r\n    weeping willows are almost everywhere here\r\n    weeping willows are usually best\r\n    I cannot believe I ate the whole thing\r\n    I cannot believe my ears\r\n    I cannot believe I ate so much\r\n    I cannot believe it\r\n    the biggest hamburger I have ever seen\r\n    the biggest hamburger I have ever eaten\r\n    the biggest hamburger I have ever had\r\n    the biggest hamburger chain in the U\r\n    gamblers eventually loose their shirts\r\n    gamblers eventually loose the game\r\n    gamblers eventually loose their wits\r\n    gamblers eventually loose all their savings\r\n    exercise is good for the mind\r\n    exercise is good for your health\r\n    exercise is good for you\r\n    exercise is good for us, too\r\n    irregular verbs are the hardest to learn\r\n    irregular verbs are the hardest one\r\n    irregular verbs are regular ones\r\n    irregular verbs are agglutinative\r\n    they might find your comment offensive\r\n    they might find your plans are negotiable\r\n    they might find your copy interesting or useful\r\n    they might find meaning or depth somewhere else\r\n    tell a lie and your nose will grow\r\n    tell a lie and your nose bleeds\r\n    tell a lie and not the truth\r\n    tell a lie and get away with it\r\n    an enlarged nose suggests you are a liar\r\n    an enlarged nose suggests that they are not related!\r\n    an enlarged nose- and eardrum\r\n    an enlarged nose\r\n    lie detector tests never work\r\n    lie detector tests revealed that 2.8 billion\r\n    lie detector tests\r\n    lie detector tests are under way\r\n    do not lie in court or else\r\n    do not lie to yourself\r\n    do not lie in court\r\n    do not lie to me any longer\r\n    most judges are very honest\r\n    most judges are also juries\r\n    most judges are more open and friendly\r\n    most judges are female\r\n    only an idiot would lie in court\r\n    only an idiot might think that\r\n    only an idiot would lie to you\r\n    only an idiot would do that\r\n    important news always seems to be late\r\n    important news always seems to precede it\r\n    important news always seems to end up there\r\n    important news always seems to originate from China\r\n    please try to be home before midnight\r\n    please try to be sensitive to your audience\r\n    please try to stay as far away as possible\r\n    please try to be kind to them\r\n    if you come home late the doors are locked\r\n    if you come home to a cock and balls?\r\n    if you come home late from your night shift?\r\n    if you come in at No\r\n    dormitory doors are locked at midnight\r\n    dormitory doors are locked for privacy\r\n    dormitory doors are locked from the inside\r\n    dormitory doors are locked\r\n    staying up all night is a bad idea\r\n    staying up all night is a luxury\r\n    staying up all night is a waste!\r\n    staying up all night is a little difficult\r\n    you are a capitalist pig\r\n    you are a coward\r\n    you are a person who believes in something\r\n    you are a medicine man for God\r\n    motivational seminars make me sick\r\n    motivational seminars make you feel good\r\n    motivational seminars make you do something\r\n    motivational seminars make increasingly specific suggestions\r\n    questioning the wisdom of the courts\r\n    questioning the wisdom of such a plan\r\n    questioning the wisdom of US\r\n    questioning the wisdom of intervening\r\n    the first time he tried to swim\r\n    the first time this has happened in 15 years\r\n    the first time\r\n    the first time he tried that in public\r\n    a steep learning curve in riding a unicycle\r\n    a steep learning curve in riding a bicycle\r\n    a steep learning curve in riding a bike\r\n    a steep learning curve in riding a motorcycle\r\n    a good stimulus deserves a good response\r\n    a good stimulus deserves a good reward\r\n    a good stimulus deserves a good target\r\n    a good stimulus deserves a bad name\r\n    everybody looses in custody battles\r\n    everybody looses in this show\r\n    everybody looses in order to win\r\n    everybody looses in the midst of sorrow?\r\n    put garbage in an abandoned mine\r\n    put garbage in his house\r\n    put garbage in my mouth\r\n    put garbage in your garbage can\r\n    employee recruitment takes a lot of effort\r\n    employee recruitment takes a long time\r\n    employee recruitment takes a lot of work\r\n    employee recruitment takes a lot of time!\r\n    experience is hard to come by\r\n    experience is hardwired into us\r\n    experience is hard to justify\r\n    experience is hard to find\r\n    everyone wants to win the lottery\r\n    everyone wants to win\r\n    everyone wants to win, I think\r\n    everyone wants to win the big games\r\n    the picket line gives me the chills\r\n    the picket line gives you clarity of vision\r\n    the picket line gives us hope\r\n    the picket line gives me great pleasure\r\n    ';
-var elm$core$Basics$apR = F2(
-	function (x, f) {
-		return f(x);
-	});
 var elm$core$Basics$composeL = F3(
 	function (g, f, x) {
 		return g(
 			f(x));
 	});
 var elm$core$Basics$not = _Basics_not;
-var elm$core$List$foldrHelper = F4(
-	function (fn, acc, ctr, ls) {
-		if (!ls.b) {
-			return acc;
-		} else {
-			var a = ls.a;
-			var r1 = ls.b;
-			if (!r1.b) {
-				return A2(fn, a, acc);
-			} else {
-				var b = r1.a;
-				var r2 = r1.b;
-				if (!r2.b) {
-					return A2(
-						fn,
-						a,
-						A2(fn, b, acc));
-				} else {
-					var c = r2.a;
-					var r3 = r2.b;
-					if (!r3.b) {
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(fn, c, acc)));
-					} else {
-						var d = r3.a;
-						var r4 = r3.b;
-						var res = (ctr > 500) ? A3(
-							elm$core$List$foldl,
-							fn,
-							acc,
-							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
-						return A2(
-							fn,
-							a,
-							A2(
-								fn,
-								b,
-								A2(
-									fn,
-									c,
-									A2(fn, d, res))));
-					}
-				}
-			}
-		}
-	});
-var elm$core$List$foldr = F3(
-	function (fn, acc, ls) {
-		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
-	});
 var elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -4823,33 +4870,79 @@ var author$project$Phrase$phraseSet = author$project$Phrase$linesToPhrases(
 			elm$core$List$map,
 			elm$core$String$trim,
 			A2(elm$core$String$split, '\n', author$project$Phrase$stringData))));
-var author$project$Main$initial = {G: _List_Nil, V: 0, H: author$project$Phrase$phraseSet, u: author$project$Main$Initial};
-var author$project$Main$Finished = function (a) {
-	return {$: 3, a: a};
+var elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var elm$core$List$map2 = _List_map2;
+var elm$core$Basics$identity = function (x) {
+	return x;
 };
-var author$project$Main$Prepare = function (a) {
-	return {$: 1, a: a};
+var elm$random$Random$Generator = elm$core$Basics$identity;
+var elm$random$Random$andThen = F2(
+	function (callback, _n0) {
+		var genA = _n0;
+		return function (seed) {
+			var _n1 = genA(seed);
+			var result = _n1.a;
+			var newSeed = _n1.b;
+			var _n2 = callback(result);
+			var genB = _n2;
+			return genB(newSeed);
+		};
+	});
+var elm$random$Random$map = F2(
+	function (func, _n0) {
+		var genA = _n0;
+		return function (seed0) {
+			var _n1 = genA(seed0);
+			var a = _n1.a;
+			var seed1 = _n1.b;
+			return _Utils_Tuple2(
+				func(a),
+				seed1);
+		};
+	});
+var elm$random$Random$map2 = F3(
+	function (func, _n0, _n1) {
+		var genA = _n0;
+		var genB = _n1;
+		return function (seed0) {
+			var _n2 = genA(seed0);
+			var a = _n2.a;
+			var seed1 = _n2.b;
+			var _n3 = genB(seed1);
+			var b = _n3.a;
+			var seed2 = _n3.b;
+			return _Utils_Tuple2(
+				A2(func, a, b),
+				seed2);
+		};
+	});
+var elm$random$Random$constant = function (value) {
+	return function (seed) {
+		return _Utils_Tuple2(value, seed);
+	};
 };
-var author$project$Main$Preparing = function (a) {
-	return {$: 1, a: a};
-};
-var author$project$Main$Recording = function (a) {
-	return {$: 2, a: a};
-};
-var elm$core$Basics$False = 1;
-var elm$core$Basics$True = 0;
-var elm$core$Result$isOk = function (result) {
-	if (!result.$) {
-		return true;
+var elm_community$random_extra$Random$Extra$combine = function (generators) {
+	if (!generators.b) {
+		return elm$random$Random$constant(_List_Nil);
 	} else {
-		return false;
+		var g = generators.a;
+		var gs = generators.b;
+		return A3(
+			elm$random$Random$map2,
+			elm$core$List$cons,
+			g,
+			elm_community$random_extra$Random$Extra$combine(gs));
 	}
 };
-var elm$core$Array$branchFactor = 32;
 var elm$core$Array$Array_elm_builtin = F4(
 	function (a, b, c, d) {
 		return {$: 0, a: a, b: b, c: c, d: d};
 	});
+var elm$core$Array$branchFactor = 32;
 var elm$core$Basics$ceiling = _Basics_ceiling;
 var elm$core$Basics$fdiv = _Basics_fdiv;
 var elm$core$Basics$logBase = F2(
@@ -4944,8 +5037,495 @@ var elm$core$Array$builderToArray = F2(
 				builder.c);
 		}
 	});
-var elm$core$Basics$idiv = _Basics_idiv;
+var elm$core$Basics$True = 0;
 var elm$core$Basics$lt = _Utils_lt;
+var elm$core$Array$fromListHelp = F3(
+	function (list, nodeList, nodeListSize) {
+		fromListHelp:
+		while (true) {
+			var _n0 = A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, list);
+			var jsArray = _n0.a;
+			var remainingItems = _n0.b;
+			if (_Utils_cmp(
+				elm$core$Elm$JsArray$length(jsArray),
+				elm$core$Array$branchFactor) < 0) {
+				return A2(
+					elm$core$Array$builderToArray,
+					true,
+					{d: nodeList, a: nodeListSize, c: jsArray});
+			} else {
+				var $temp$list = remainingItems,
+					$temp$nodeList = A2(
+					elm$core$List$cons,
+					elm$core$Array$Leaf(jsArray),
+					nodeList),
+					$temp$nodeListSize = nodeListSize + 1;
+				list = $temp$list;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue fromListHelp;
+			}
+		}
+	});
+var elm$core$Array$fromList = function (list) {
+	if (!list.b) {
+		return elm$core$Array$empty;
+	} else {
+		return A3(elm$core$Array$fromListHelp, list, _List_Nil, 0);
+	}
+};
+var elm$core$Array$length = function (_n0) {
+	var len = _n0.a;
+	return len;
+};
+var elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var elm$core$Basics$remainderBy = _Basics_remainderBy;
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var elm$random$Random$next = function (_n0) {
+	var state0 = _n0.a;
+	var incr = _n0.b;
+	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var elm$core$Bitwise$xor = _Bitwise_xor;
+var elm$random$Random$peel = function (_n0) {
+	var state = _n0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var elm$random$Random$int = F2(
+	function (a, b) {
+		return function (seed0) {
+			var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+			var lo = _n0.a;
+			var hi = _n0.b;
+			var range = (hi - lo) + 1;
+			if (!((range - 1) & range)) {
+				return _Utils_Tuple2(
+					(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
+					elm$random$Random$next(seed0));
+			} else {
+				var threshhold = (((-range) >>> 0) % range) >>> 0;
+				var accountForBias = function (seed) {
+					accountForBias:
+					while (true) {
+						var x = elm$random$Random$peel(seed);
+						var seedN = elm$random$Random$next(seed);
+						if (_Utils_cmp(x, threshhold) < 0) {
+							var $temp$seed = seedN;
+							seed = $temp$seed;
+							continue accountForBias;
+						} else {
+							return _Utils_Tuple2((x % range) + lo, seedN);
+						}
+					}
+				};
+				return accountForBias(seed0);
+			}
+		};
+	});
+var elm$random$Random$listHelp = F4(
+	function (revList, n, gen, seed) {
+		listHelp:
+		while (true) {
+			if (n < 1) {
+				return _Utils_Tuple2(revList, seed);
+			} else {
+				var _n0 = gen(seed);
+				var value = _n0.a;
+				var newSeed = _n0.b;
+				var $temp$revList = A2(elm$core$List$cons, value, revList),
+					$temp$n = n - 1,
+					$temp$gen = gen,
+					$temp$seed = newSeed;
+				revList = $temp$revList;
+				n = $temp$n;
+				gen = $temp$gen;
+				seed = $temp$seed;
+				continue listHelp;
+			}
+		}
+	});
+var elm$random$Random$list = F2(
+	function (n, _n0) {
+		var gen = _n0;
+		return function (seed) {
+			return A4(elm$random$Random$listHelp, _List_Nil, n, gen, seed);
+		};
+	});
+var elm$core$Array$bitMask = 4294967295 >>> (32 - elm$core$Array$shiftStep);
+var elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = elm$core$Array$bitMask & (index >>> shift);
+			var _n0 = A2(elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (!_n0.$) {
+				var subTree = _n0.a;
+				var $temp$shift = shift - elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _n0.a;
+				return A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var elm$core$Basics$ge = _Utils_ge;
+var elm$core$Basics$or = _Basics_or;
+var elm$core$Array$get = F2(
+	function (index, _n0) {
+		var len = _n0.a;
+		var startShift = _n0.b;
+		var tree = _n0.c;
+		var tail = _n0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			elm$core$Array$tailIndex(len)) > -1) ? elm$core$Maybe$Just(
+			A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, tail)) : elm$core$Maybe$Just(
+			A3(elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var elm$core$Array$isEmpty = function (_n0) {
+	var len = _n0.a;
+	return !len;
+};
+var elm$core$Basics$modBy = _Basics_modBy;
+var elm$core$Tuple$second = function (_n0) {
+	var y = _n0.b;
+	return y;
+};
+var elm$core$Basics$compare = _Utils_compare;
+var elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === -2) {
+				return elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _n1 = A2(elm$core$Basics$compare, targetKey, key);
+				switch (_n1) {
+					case 0:
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 1:
+						return elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var owanturist$elm_union_find$UnionFind$findFast = F2(
+	function (id, dict) {
+		findFast:
+		while (true) {
+			var _n0 = A2(elm$core$Dict$get, id, dict);
+			if (_n0.$ === 1) {
+				return id;
+			} else {
+				var cursor = _n0.a;
+				if (_Utils_eq(id, cursor)) {
+					return id;
+				} else {
+					var $temp$id = cursor,
+						$temp$dict = dict;
+					id = $temp$id;
+					dict = $temp$dict;
+					continue findFast;
+				}
+			}
+		}
+	});
+var owanturist$elm_union_find$UnionFind$find = F2(
+	function (id, _n0) {
+		var dict = _n0.b;
+		return A2(owanturist$elm_union_find$UnionFind$findFast, id, dict);
+	});
+var elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
+var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
+var owanturist$elm_union_find$UnionFind$QuickUnionPathCompression = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var owanturist$elm_union_find$UnionFind$quickUnionPathCompression = A2(owanturist$elm_union_find$UnionFind$QuickUnionPathCompression, 0, elm$core$Dict$empty);
+var elm$core$Dict$Black = 1;
+var elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+	});
+var elm$core$Dict$Red = 0;
+var elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === -1) && (!right.a)) {
+			var _n1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === -1) && (!left.a)) {
+				var _n3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					0,
+					key,
+					value,
+					A5(elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5(elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
+				var _n5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _n6 = left.d;
+				var _n7 = _n6.a;
+				var llK = _n6.b;
+				var llV = _n6.c;
+				var llLeft = _n6.d;
+				var llRight = _n6.e;
+				var lRight = left.e;
+				return A5(
+					elm$core$Dict$RBNode_elm_builtin,
+					0,
+					lK,
+					lV,
+					A5(elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5(elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
+			} else {
+				return A5(elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === -2) {
+			return A5(elm$core$Dict$RBNode_elm_builtin, 0, key, value, elm$core$Dict$RBEmpty_elm_builtin, elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _n1 = A2(elm$core$Basics$compare, key, nKey);
+			switch (_n1) {
+				case 0:
+					return A5(
+						elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3(elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 1:
+					return A5(elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3(elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _n0 = A3(elm$core$Dict$insertHelp, key, value, dict);
+		if ((_n0.$ === -1) && (!_n0.a)) {
+			var _n1 = _n0.a;
+			var k = _n0.b;
+			var v = _n0.c;
+			var l = _n0.d;
+			var r = _n0.e;
+			return A5(elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _n0;
+			return x;
+		}
+	});
+var owanturist$elm_union_find$UnionFind$findCompressed = F2(
+	function (id, dict) {
+		var _n0 = A2(elm$core$Dict$get, id, dict);
+		if (_n0.$ === 1) {
+			return _Utils_Tuple2(
+				id,
+				A3(elm$core$Dict$insert, id, id, dict));
+		} else {
+			var cursor = _n0.a;
+			if (_Utils_eq(id, cursor)) {
+				return _Utils_Tuple2(id, dict);
+			} else {
+				var _n1 = A2(owanturist$elm_union_find$UnionFind$findCompressed, cursor, dict);
+				var parent = _n1.a;
+				var nextDict = _n1.b;
+				return _Utils_Tuple2(
+					parent,
+					A3(elm$core$Dict$insert, id, parent, nextDict));
+			}
+		}
+	});
+var owanturist$elm_union_find$UnionFind$union = F3(
+	function (left, right, _n0) {
+		var count_ = _n0.a;
+		var dict = _n0.b;
+		var _n1 = A2(owanturist$elm_union_find$UnionFind$findCompressed, left, dict);
+		var leftRoot = _n1.a;
+		var leftDict = _n1.b;
+		var _n2 = A2(owanturist$elm_union_find$UnionFind$findCompressed, right, leftDict);
+		var rightRoot = _n2.a;
+		var rightDict = _n2.b;
+		return _Utils_eq(leftRoot, rightRoot) ? A2(owanturist$elm_union_find$UnionFind$QuickUnionPathCompression, count_, rightDict) : A2(
+			owanturist$elm_union_find$UnionFind$QuickUnionPathCompression,
+			count_ + 1,
+			A3(elm$core$Dict$insert, leftRoot, rightRoot, rightDict));
+	});
+var elm_community$random_extra$Utils$selectUniqByIndexes = F2(
+	function (values, randomIndexes) {
+		var modByLength = elm$core$Basics$modBy(
+			elm$core$Array$length(values));
+		var step = F2(
+			function (randomIndex, _n1) {
+				var uf = _n1.a;
+				var acc = _n1.b;
+				var leaderOfElement = A2(owanturist$elm_union_find$UnionFind$find, randomIndex, uf);
+				var leaderOfNextElement = A2(
+					owanturist$elm_union_find$UnionFind$find,
+					modByLength(leaderOfElement + 1),
+					uf);
+				var _n0 = A2(elm$core$Array$get, leaderOfElement, values);
+				if (_n0.$ === 1) {
+					return _Utils_Tuple2(uf, acc);
+				} else {
+					var value = _n0.a;
+					return _Utils_Tuple2(
+						A3(owanturist$elm_union_find$UnionFind$union, leaderOfElement, leaderOfNextElement, uf),
+						A2(elm$core$List$cons, value, acc));
+				}
+			});
+		return elm$core$Array$isEmpty(values) ? _List_Nil : A3(
+			elm$core$List$foldr,
+			step,
+			_Utils_Tuple2(owanturist$elm_union_find$UnionFind$quickUnionPathCompression, _List_Nil),
+			randomIndexes).b;
+	});
+var elm_community$random_extra$Random$List$shuffle = function (list) {
+	var values = elm$core$Array$fromList(list);
+	var length = elm$core$Array$length(values);
+	return A2(
+		elm$random$Random$map,
+		elm_community$random_extra$Utils$selectUniqByIndexes(values),
+		A2(
+			elm$random$Random$list,
+			length,
+			A2(elm$random$Random$int, 0, length - 1)));
+};
+var author$project$Main$randomize = function () {
+	var shuffleSuggestions = function (phrase) {
+		return A2(
+			elm$random$Random$map,
+			A2(
+				elm$core$Basics$composeR,
+				elm$core$List$take(3),
+				author$project$Phrase$Phrase(phrase.F)),
+			elm_community$random_extra$Random$List$shuffle(
+				A2(elm$core$List$cons, phrase.F, phrase.am)));
+	};
+	var phrases = elm_community$random_extra$Random$Extra$combine(
+		A2(elm$core$List$map, shuffleSuggestions, author$project$Phrase$phraseSet));
+	return A3(
+		elm$random$Random$map2,
+		elm$core$List$map2(
+			F2(
+				function (phrase, point) {
+					return A3(author$project$Main$RandomPhrase, phrase.F, phrase.am, point);
+				})),
+		A2(elm$random$Random$andThen, elm_community$random_extra$Random$List$shuffle, phrases),
+		elm_community$random_extra$Random$List$shuffle(author$project$Main$timepoints));
+}();
+var author$project$Main$Download = function (a) {
+	return {$: 3, a: a};
+};
+var author$project$Main$Presenting = {$: 1};
+var author$project$Main$Typing = function (a) {
+	return {$: 2, a: a};
+};
+var elm$core$Basics$idiv = _Basics_idiv;
+var elm$core$List$length = function (xs) {
+	return A3(
+		elm$core$List$foldl,
+		F2(
+			function (_n0, i) {
+				return i + 1;
+			}),
+		0,
+		xs);
+};
+var author$project$Main$blockSize = (elm$core$List$length(author$project$Main$timepoints) / author$project$Main$blockCount) | 0;
+var elm$core$List$tail = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return elm$core$Maybe$Just(xs);
+	} else {
+		return elm$core$Maybe$Nothing;
+	}
+};
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var elm$core$Basics$False = 1;
+var elm$core$Result$isOk = function (result) {
+	if (!result.$) {
+		return true;
+	} else {
+		return false;
+	}
+};
 var elm$core$Elm$JsArray$initialize = _JsArray_initialize;
 var elm$core$Array$initializeHelp = F5(
 	function (fn, fromIndex, len, nodeList, tail) {
@@ -4973,7 +5553,6 @@ var elm$core$Array$initializeHelp = F5(
 			}
 		}
 	});
-var elm$core$Basics$remainderBy = _Basics_remainderBy;
 var elm$core$Array$initialize = F2(
 	function (len, fn) {
 		if (len <= 0) {
@@ -5008,7 +5587,6 @@ var elm$json$Json$Decode$OneOf = function (a) {
 };
 var elm$core$Basics$and = _Basics_and;
 var elm$core$Basics$append = _Utils_append;
-var elm$core$Basics$or = _Basics_or;
 var elm$core$Char$toCode = _Char_toCode;
 var elm$core$Char$isLower = function (_char) {
 	var code = elm$core$Char$toCode(_char);
@@ -5028,17 +5606,6 @@ var elm$core$Char$isDigit = function (_char) {
 var elm$core$Char$isAlphaNum = function (_char) {
 	return elm$core$Char$isLower(_char) || (elm$core$Char$isUpper(_char) || elm$core$Char$isDigit(_char));
 };
-var elm$core$List$length = function (xs) {
-	return A3(
-		elm$core$List$foldl,
-		F2(
-			function (_n0, i) {
-				return i + 1;
-			}),
-		0,
-		xs);
-};
-var elm$core$List$map2 = _List_map2;
 var elm$core$List$rangeHelp = F3(
 	function (lo, hi, list) {
 		rangeHelp:
@@ -5193,278 +5760,68 @@ var elm$json$Json$Decode$errorToStringHelp = F2(
 	});
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
-var elm$core$Basics$identity = function (x) {
-	return x;
-};
-var elm$random$Random$Generate = elm$core$Basics$identity;
-var elm$core$Task$andThen = _Scheduler_andThen;
-var elm$core$Task$succeed = _Scheduler_succeed;
-var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var elm$random$Random$initialSeed = function (x) {
-	var _n0 = elm$random$Random$next(
-		A2(elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _n0.a;
-	var incr = _n0.b;
-	var state2 = (state1 + x) >>> 0;
-	return elm$random$Random$next(
-		A2(elm$random$Random$Seed, state2, incr));
-};
-var elm$time$Time$Name = function (a) {
-	return {$: 0, a: a};
-};
-var elm$time$Time$Offset = function (a) {
-	return {$: 1, a: a};
-};
-var elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$time$Time$customZone = elm$time$Time$Zone;
-var elm$time$Time$Posix = elm$core$Basics$identity;
-var elm$time$Time$millisToPosix = elm$core$Basics$identity;
-var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
-var elm$time$Time$posixToMillis = function (_n0) {
-	var millis = _n0;
-	return millis;
-};
-var elm$random$Random$init = A2(
-	elm$core$Task$andThen,
-	function (time) {
-		return elm$core$Task$succeed(
-			elm$random$Random$initialSeed(
-				elm$time$Time$posixToMillis(time)));
-	},
-	elm$time$Time$now);
-var elm$core$Platform$sendToApp = _Platform_sendToApp;
-var elm$random$Random$step = F2(
-	function (_n0, seed) {
-		var generator = _n0;
-		return generator(seed);
-	});
-var elm$random$Random$onEffects = F3(
-	function (router, commands, seed) {
-		if (!commands.b) {
-			return elm$core$Task$succeed(seed);
-		} else {
-			var generator = commands.a;
-			var rest = commands.b;
-			var _n1 = A2(elm$random$Random$step, generator, seed);
-			var value = _n1.a;
-			var newSeed = _n1.b;
-			return A2(
-				elm$core$Task$andThen,
-				function (_n2) {
-					return A3(elm$random$Random$onEffects, router, rest, newSeed);
-				},
-				A2(elm$core$Platform$sendToApp, router, value));
-		}
-	});
-var elm$random$Random$onSelfMsg = F3(
-	function (_n0, _n1, seed) {
-		return elm$core$Task$succeed(seed);
-	});
-var elm$random$Random$Generator = elm$core$Basics$identity;
-var elm$random$Random$map = F2(
-	function (func, _n0) {
-		var genA = _n0;
-		return function (seed0) {
-			var _n1 = genA(seed0);
-			var a = _n1.a;
-			var seed1 = _n1.b;
-			return _Utils_Tuple2(
-				func(a),
-				seed1);
-		};
-	});
-var elm$random$Random$cmdMap = F2(
-	function (func, _n0) {
-		var generator = _n0;
-		return A2(elm$random$Random$map, func, generator);
-	});
-_Platform_effectManagers['Random'] = _Platform_createManager(elm$random$Random$init, elm$random$Random$onEffects, elm$random$Random$onSelfMsg, elm$random$Random$cmdMap);
-var elm$random$Random$command = _Platform_leaf('Random');
-var elm$random$Random$generate = F2(
-	function (tagger, generator) {
-		return elm$random$Random$command(
-			A2(elm$random$Random$map, tagger, generator));
-	});
-var elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
-		}
-	});
-var elm$core$List$isEmpty = function (xs) {
-	if (!xs.b) {
-		return true;
-	} else {
-		return false;
-	}
-};
-var elm$random$Random$constant = function (value) {
-	return function (seed) {
-		return _Utils_Tuple2(value, seed);
-	};
-};
-var elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var elm$core$Bitwise$and = _Bitwise_and;
-var elm$core$Bitwise$xor = _Bitwise_xor;
-var elm$random$Random$peel = function (_n0) {
-	var state = _n0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var elm$random$Random$int = F2(
-	function (a, b) {
-		return function (seed0) {
-			var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-			var lo = _n0.a;
-			var hi = _n0.b;
-			var range = (hi - lo) + 1;
-			if (!((range - 1) & range)) {
-				return _Utils_Tuple2(
-					(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
-					elm$random$Random$next(seed0));
-			} else {
-				var threshhold = (((-range) >>> 0) % range) >>> 0;
-				var accountForBias = function (seed) {
-					accountForBias:
-					while (true) {
-						var x = elm$random$Random$peel(seed);
-						var seedN = elm$random$Random$next(seed);
-						if (_Utils_cmp(x, threshhold) < 0) {
-							var $temp$seed = seedN;
-							seed = $temp$seed;
-							continue accountForBias;
-						} else {
-							return _Utils_Tuple2((x % range) + lo, seedN);
-						}
-					}
-				};
-				return accountForBias(seed0);
-			}
-		};
-	});
-var elm$core$List$head = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return elm$core$Maybe$Just(x);
-	} else {
-		return elm$core$Maybe$Nothing;
-	}
-};
-var elm_community$random_extra$Random$List$get = F2(
-	function (index, list) {
-		return elm$core$List$head(
-			A2(elm$core$List$drop, index, list));
-	});
-var elm_community$random_extra$Random$List$choose = function (list) {
-	if (elm$core$List$isEmpty(list)) {
-		return elm$random$Random$constant(
-			_Utils_Tuple2(elm$core$Maybe$Nothing, list));
-	} else {
-		var lastIndex = elm$core$List$length(list) - 1;
-		var gen = A2(elm$random$Random$int, 0, lastIndex);
-		var front = function (i) {
-			return A2(elm$core$List$take, i, list);
-		};
-		var back = function (i) {
-			return A2(elm$core$List$drop, i + 1, list);
-		};
-		return A2(
-			elm$random$Random$map,
-			function (index) {
-				return _Utils_Tuple2(
-					A2(elm_community$random_extra$Random$List$get, index, list),
-					A2(
-						elm$core$List$append,
-						front(index),
-						back(index)));
-			},
-			gen);
-	}
-};
 var author$project$Main$update = F2(
 	function (event, model) {
 		var recordEvent = _Utils_update(
 			model,
 			{
-				G: A2(elm$core$List$cons, event, model.G)
+				J: A2(elm$core$List$cons, event, model.J)
 			});
 		var result = function () {
 			switch (event.$) {
 				case 0:
-					return recordEvent;
+					var phrases = event.a;
+					return _Utils_update(
+						recordEvent,
+						{y: phrases});
 				case 1:
-					if (!event.a.a.$) {
-						var _n2 = event.a;
-						var phrase = _n2.a.a;
-						var phrases = _n2.b;
+					var _n1 = model.l;
+					switch (_n1.$) {
+						case 0:
+							return _Utils_update(
+								recordEvent,
+								{l: author$project$Main$Presenting, x: model.x + 1});
+						case 1:
+							return _Utils_update(
+								recordEvent,
+								{
+									l: author$project$Main$Typing('')
+								});
+						case 2:
+							return _Utils_update(
+								recordEvent,
+								{
+									l: author$project$Main$Download('*gemessene daten*'),
+									y: A2(
+										elm$core$Maybe$withDefault,
+										_List_Nil,
+										elm$core$List$tail(model.y))
+								});
+						default:
+							return model;
+					}
+				default:
+					var time = event.a;
+					var newValue = event.b;
+					var _n2 = model.l;
+					if (_n2.$ === 2) {
+						var oldValue = _n2.a;
 						return _Utils_update(
 							recordEvent,
 							{
-								H: phrases,
-								u: author$project$Main$Preparing(phrase)
+								l: author$project$Main$Typing(newValue)
 							});
 					} else {
-						return recordEvent;
+						return model;
 					}
-				case 2:
-					var time = event.a;
-					return _Utils_update(
-						recordEvent,
-						{
-							u: author$project$Main$Recording('')
-						});
-				case 3:
-					var time = event.a;
-					var string = event.b;
-					return _Utils_update(
-						recordEvent,
-						{
-							u: author$project$Main$Recording(string)
-						});
-				default:
-					var time = event.a;
-					return _Utils_update(
-						recordEvent,
-						{
-							u: author$project$Main$Finished('*gemessene daten*')
-						});
 			}
 		}();
-		var command = function () {
-			if (!event.$) {
-				return A2(
-					elm$random$Random$generate,
-					author$project$Main$Prepare,
-					elm_community$random_extra$Random$List$choose(model.H));
-			} else {
-				return elm$core$Platform$Cmd$none;
-			}
-		}();
-		return _Utils_Tuple2(result, command);
+		var phrasesCompleted = !(model.x % author$project$Main$blockSize);
+		var blocksCompleted = ((model.x / author$project$Main$blockSize) | 0) === 3;
+		return _Utils_Tuple2(result, elm$core$Platform$Cmd$none);
 	});
-var author$project$Main$Finish = function (a) {
-	return {$: 4, a: a};
-};
-var author$project$Main$NextPhrase = {$: 0};
-var author$project$Main$Start = function (a) {
-	return {$: 2, a: a};
+var author$project$Main$Next = function (a) {
+	return {$: 1, a: a};
 };
 var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$float = _Json_decodeFloat;
@@ -5503,7 +5860,7 @@ var author$project$Main$recordClick = function (message) {
 };
 var author$project$Main$Type = F2(
 	function (a, b) {
-		return {$: 3, a: a, b: b};
+		return {$: 2, a: a, b: b};
 	});
 var elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
@@ -5533,99 +5890,100 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
-var elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		elm$html$Html$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
 var author$project$Main$view = function (model) {
 	var contents = function () {
-		var _n0 = model.u;
-		switch (_n0.$) {
-			case 0:
-				return A2(
-					elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							elm$html$Html$text('Willkommen'),
-							A2(
-							elm$html$Html$button,
+		var _n0 = _Utils_Tuple2(model.l, model.y);
+		_n0$4:
+		while (true) {
+			switch (_n0.a.$) {
+				case 0:
+					var _n1 = _n0.a;
+					return A2(
+						elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								elm$html$Html$text('Bereit für den nächsten Schritt.'),
+								A2(
+								elm$html$Html$button,
+								_List_fromArray(
+									[
+										author$project$Main$recordClick(author$project$Main$Next)
+									]),
+								_List_fromArray(
+									[
+										elm$html$Html$text('Los geht\'s!')
+									]))
+							]));
+				case 1:
+					if (_n0.b.b) {
+						var _n2 = _n0.a;
+						var _n3 = _n0.b;
+						var phrase = _n3.a;
+						return A2(
+							elm$html$Html$div,
+							_List_Nil,
 							_List_fromArray(
 								[
-									elm$html$Html$Events$onClick(author$project$Main$NextPhrase)
-								]),
+									elm$html$Html$text('Prägen Sie sich folgende Phrase ein: `' + (phrase.F + '`')),
+									A2(
+									elm$html$Html$button,
+									_List_fromArray(
+										[
+											author$project$Main$recordClick(author$project$Main$Next)
+										]),
+									_List_fromArray(
+										[
+											elm$html$Html$text('Starten')
+										]))
+								]));
+					} else {
+						break _n0$4;
+					}
+				case 2:
+					if (_n0.b.b) {
+						var transcription = _n0.a.a;
+						var _n4 = _n0.b;
+						var phrase = _n4.a;
+						return A2(
+							elm$html$Html$div,
+							_List_Nil,
 							_List_fromArray(
 								[
-									elm$html$Html$text('Los geht\'s!')
-								]))
-						]));
-			case 1:
-				var phrase = _n0.a;
-				return A2(
-					elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							elm$html$Html$text('Prägen Sie sich folgende Phrase ein: `' + (phrase.aF + '`')),
-							A2(
-							elm$html$Html$button,
-							_List_fromArray(
-								[
-									author$project$Main$recordClick(author$project$Main$Start)
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text('Starten')
-								]))
-						]));
-			case 2:
-				var transcription = _n0.a;
-				return A2(
-					elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							elm$html$Html$input,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$value(transcription),
-									author$project$Main$recordTyping
-								]),
-							_List_Nil),
-							A2(
-							elm$html$Html$button,
-							_List_fromArray(
-								[
-									author$project$Main$recordClick(author$project$Main$Finish)
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text('Fertig!')
-								]))
-						]));
-			default:
-				var download = _n0.a;
-				return A2(
-					elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							elm$html$Html$text('Schick mir bitte folgende Nachricht: ' + download),
-							A2(
-							elm$html$Html$button,
-							_List_fromArray(
-								[
-									elm$html$Html$Events$onClick(author$project$Main$NextPhrase)
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text('Weiter')
-								]))
-						]));
+									A2(
+									elm$html$Html$input,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$value(transcription),
+											author$project$Main$recordTyping
+										]),
+									_List_Nil),
+									A2(
+									elm$html$Html$button,
+									_List_fromArray(
+										[
+											author$project$Main$recordClick(author$project$Main$Next)
+										]),
+									_List_fromArray(
+										[
+											elm$html$Html$text('Fertig!')
+										]))
+								]));
+					} else {
+						break _n0$4;
+					}
+				default:
+					var download = _n0.a.a;
+					return A2(
+						elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								elm$html$Html$text('Schick mir bitte folgende Nachricht: ' + download)
+							]));
+			}
 		}
+		return elm$html$Html$text('Fertig, yay!');
 	}();
 	return A2(
 		elm$html$Html$div,
@@ -5650,7 +6008,9 @@ var elm$core$Basics$never = function (_n0) {
 	}
 };
 var elm$core$Task$Perform = elm$core$Basics$identity;
+var elm$core$Task$succeed = _Scheduler_succeed;
 var elm$core$Task$init = elm$core$Task$succeed(0);
+var elm$core$Task$andThen = _Scheduler_andThen;
 var elm$core$Task$map = F2(
 	function (func, taskA) {
 		return A2(
@@ -5683,6 +6043,7 @@ var elm$core$Task$sequence = function (tasks) {
 		elm$core$Task$succeed(_List_Nil),
 		tasks);
 };
+var elm$core$Platform$sendToApp = _Platform_sendToApp;
 var elm$core$Task$spawnCmd = F2(
 	function (router, _n0) {
 		var task = _n0;
@@ -5743,7 +6104,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {S: fragment, U: host, Z: path, aa: port_, ad: protocol, ae: query};
+		return {V: fragment, X: host, aa: path, ac: port_, af: protocol, ag: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -5854,14 +6215,91 @@ var elm$core$Basics$always = F2(
 	});
 var elm$core$Platform$Sub$batch = _Platform_batch;
 var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
+var elm$random$Random$Generate = elm$core$Basics$identity;
+var elm$random$Random$initialSeed = function (x) {
+	var _n0 = elm$random$Random$next(
+		A2(elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _n0.a;
+	var incr = _n0.b;
+	var state2 = (state1 + x) >>> 0;
+	return elm$random$Random$next(
+		A2(elm$random$Random$Seed, state2, incr));
+};
+var elm$time$Time$Name = function (a) {
+	return {$: 0, a: a};
+};
+var elm$time$Time$Offset = function (a) {
+	return {$: 1, a: a};
+};
+var elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var elm$time$Time$customZone = elm$time$Time$Zone;
+var elm$time$Time$Posix = elm$core$Basics$identity;
+var elm$time$Time$millisToPosix = elm$core$Basics$identity;
+var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
+var elm$time$Time$posixToMillis = function (_n0) {
+	var millis = _n0;
+	return millis;
+};
+var elm$random$Random$init = A2(
+	elm$core$Task$andThen,
+	function (time) {
+		return elm$core$Task$succeed(
+			elm$random$Random$initialSeed(
+				elm$time$Time$posixToMillis(time)));
+	},
+	elm$time$Time$now);
+var elm$random$Random$step = F2(
+	function (_n0, seed) {
+		var generator = _n0;
+		return generator(seed);
+	});
+var elm$random$Random$onEffects = F3(
+	function (router, commands, seed) {
+		if (!commands.b) {
+			return elm$core$Task$succeed(seed);
+		} else {
+			var generator = commands.a;
+			var rest = commands.b;
+			var _n1 = A2(elm$random$Random$step, generator, seed);
+			var value = _n1.a;
+			var newSeed = _n1.b;
+			return A2(
+				elm$core$Task$andThen,
+				function (_n2) {
+					return A3(elm$random$Random$onEffects, router, rest, newSeed);
+				},
+				A2(elm$core$Platform$sendToApp, router, value));
+		}
+	});
+var elm$random$Random$onSelfMsg = F3(
+	function (_n0, _n1, seed) {
+		return elm$core$Task$succeed(seed);
+	});
+var elm$random$Random$cmdMap = F2(
+	function (func, _n0) {
+		var generator = _n0;
+		return A2(elm$random$Random$map, func, generator);
+	});
+_Platform_effectManagers['Random'] = _Platform_createManager(elm$random$Random$init, elm$random$Random$onEffects, elm$random$Random$onSelfMsg, elm$random$Random$cmdMap);
+var elm$random$Random$command = _Platform_leaf('Random');
+var elm$random$Random$generate = F2(
+	function (tagger, generator) {
+		return elm$random$Random$command(
+			A2(elm$random$Random$map, tagger, generator));
+	});
 var author$project$Main$main = elm$browser$Browser$element(
 	{
-		ay: function (_n0) {
-			return _Utils_Tuple2(author$project$Main$initial, elm$core$Platform$Cmd$none);
+		aB: function (_n0) {
+			return _Utils_Tuple2(
+				author$project$Main$initial,
+				A2(elm$random$Random$generate, author$project$Main$Randomize, author$project$Main$randomize));
 		},
-		aE: elm$core$Basics$always(elm$core$Platform$Sub$none),
-		aH: author$project$Main$update,
-		aK: author$project$Main$view
+		aI: elm$core$Basics$always(elm$core$Platform$Sub$none),
+		aL: author$project$Main$update,
+		aN: author$project$Main$view
 	});
 _Platform_export({'Main':{'init':author$project$Main$main(
 	elm$json$Json$Decode$succeed(0))(0)}});}(this));
