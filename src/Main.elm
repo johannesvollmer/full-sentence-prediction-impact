@@ -147,7 +147,7 @@ view model =
 
     contents = case model.phrases of
       [] -> 
-          [ Html.p [] [text "Schick mir bitte folgende Datei: "]
+          [ Html.p [] [text "Fertig, yay! 🥳🎉 Schick mir bitte folgende Datei: "]
           , Html.button [ onClick Download ] [ text "Herunterladen" ] 
           ]
 
@@ -160,7 +160,7 @@ view model =
         Presenting ->
           [ Html.h2 [] [text ("Phrase " ++ progress ++ "")]
           , Html.p [ Html.Attributes.class "phrase" ] [text phrase.target]
-          , Html.button [ recordClick Next, Html.Attributes.class "next" ] [ text "Zeitmessung Starten!" ]
+          , Html.button [ recordClick Next, Html.Attributes.class "next delayed" ] [ text "Zeitmessung Starten!" ]
           ]
 
         Typing transcription -> 
