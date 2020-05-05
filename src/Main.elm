@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, text)
@@ -7,13 +7,15 @@ import Html.Attributes
 import Phrase exposing (Phrase, phraseSet)
 import Random.List
 import Random exposing (Generator)
-import Json.Decode exposing (Decoder, field, string, int, float)
+import Json.Decode exposing (field, string, float)
 import Json.Encode as Encode
 import Random.Extra exposing (combine)
 import File.Download
 import Levenshtein
 import Task
 import Browser.Dom
+
+
 
 main =
   Browser.element
@@ -23,8 +25,8 @@ main =
     , view = view
     }
 
-blockCount = 3
-timepointsamples = [0.0, 0.5, 1.0] -- [0.0, 0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9, 1.0]
+blockCount = 4
+timepointsamples = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0] 
 
 blockSize = List.length timepointsamples
 
@@ -51,6 +53,11 @@ type alias RandomPhrase =
   , percentage: Float -- percentage of text that must be entered until suggestions are shown
   }
 
+type Mode
+  = Ready
+  | Presenting
+  | Typing String
+
 initial: Model
 initial = 
   { events = [] -- reverse actually
@@ -73,17 +80,6 @@ randomize =
     (List.map2 (\phrase point -> RandomPhrase phrase.target phrase.variants point))
     (Random.andThen Random.List.shuffle phrases)
     (Random.map List.concat shuffledTimepoints)
-
-
-
-type Mode
-  = Ready
-
-  | Presenting
-  | Typing String
-  
--- contains downloadable blob url
-type alias Results = String
 
 update : Message -> Model -> (Model, Cmd Message)
 update event model = 
@@ -133,7 +129,7 @@ update event model =
     command = case event of
       Download -> File.Download.string "messungen.json" "text/json" 
         (List.reverse model.events |> Encode.list identity |> Encode.encode 4)
-        
+
       Next _ -> case model.mode of
         Presenting -> Task.attempt (always None) (Browser.Dom.focus "phrase-textbox")
         _ -> Cmd.none
