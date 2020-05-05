@@ -1,5 +1,6 @@
 html {
     padding: 8em;
+    background-color: #f8f8f8;
 }
 
 
@@ -8,34 +9,45 @@ html {
     font-size: 1.1rem;
 }
 
-/*main {
-    color: #eee;
-    background-color: #444;
+h1 { 
+    font-size: 1.3em;
+}
 
+main, #content {
     display: flex;
     flex-direction: column;
+}
+
+main {
+    color: #333;
+    background-color: #fff;
+
 
     margin: auto;
     padding: 1em;
-    max-width: 80em;
+    max-width: 40em;
+
+    box-shadow: 2px 2px 5px #0001;
+    border-radius: 3px;
 }
 
-main > *:not(:last-child) {
+main > *:not(:last-child), #content > *:not(:last-child) {
     margin-bottom: 1em;
-}*/
+}
 
-input[type="button"] {
+button {
     border: none;
     outline: none;
     padding: 0.8em;
-    background-color: #fff1;
-    color: #eee;
     cursor: pointer;
+    background-color: #eee;
+    color: #333;
+    border-radius: 3px;
 }
 
-input[type="button"]:hover {
-    background-color: #fff2;
-    color: #fff;
+button:hover {
+    background-color: #f7f7f7;
+    color: #000;
 }
 
 textarea {
@@ -53,6 +65,31 @@ textarea {
     display: none;
 }
 
-.page {
-    
+
+.phrase {
+    background-color: #222;
+    color: #fff;
+    padding: 2em;
+    text-align: center;
+    font-size: 1.5em;
+    margin: 0;
+    border-radius: 3px;
+    border: none;
+}
+
+p.phrase {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.next {
+    background-color: #077;
+    color: #fff;
+}
+
+.next:hover {
+    background-color: #099;
+    color: #fff;
 }
